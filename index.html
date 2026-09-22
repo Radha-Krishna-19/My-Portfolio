@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>P.M. Radha Krishna - Engineering Portfolio</title>
+  <title>P.M. Radha Krishna — Engineering Portfolio</title>
+  <meta name="description" content="P.M. Radha Krishna — CSE undergraduate at Amrita Vishwa Vidyapeetham building across software, machine learning and embedded systems." />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%235b8cff'/%3E%3Ctext x='50' y='66' font-size='50' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3ERK%3C/text%3E%3C/svg%3E" />
 
   <!-- Fonts & CSS -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@2.15.1/devicon.min.css">
   <link rel="stylesheet" href="style.css" />
 
   <!-- EmailJS SDK -->
@@ -16,19 +21,22 @@
   <script defer src="script.js"></script>
 </head>
 <body>
-  <!-- Particle Background -->
+  <!-- Background layers -->
+  <div class="bg-glow"></div>
+  <div class="bg-grid"></div>
   <canvas id="particles"></canvas>
+  <div id="scroll-progress"></div>
 
   <!-- Loader -->
   <div id="loader">
-    <div class="loader-circle"></div>
-    <h2>Loading Portfolio...</h2>
+    <div class="loader-mark">RK<span>.</span></div>
+    <div class="loader-bar"></div>
   </div>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <div class="logo">RK<span>.</span></div>
+      <a href="#home" class="logo"><span class="logo-mark">RK</span>Radha Krishna</a>
       <ul class="nav-menu">
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
@@ -37,8 +45,14 @@
         <li><a href="#achievements">Achievements</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <div class="hamburger">
-        <span></span><span></span><span></span>
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="icon-moon">🌙</span>
+          <span class="icon-sun">☀️</span>
+        </button>
+        <div class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
       </div>
     </div>
   </nav>
@@ -47,53 +61,114 @@
   <section id="home" class="hero reveal-section">
     <div class="hero-content">
       <div class="hero-text">
-        <p class="hero-kicker">P.M. Radha Krishna</p>
+        <p class="hero-kicker"><span class="wave">👋</span> Hi, I'm</p>
         <h1 class="hero-title">
-          <span class="gradient-text">Engineering Portfolio</span>
+          <span class="gradient-text">P.M. Radha Krishna</span>
         </h1>
+        <p class="hero-role">I'm a <span id="typed"></span><span class="cursor-blink"></span></p>
         <p class="hero-subtitle">
-          3rd year CSE student at Amrita Vishwa Vidyapeetham, Coimbatore with CGPA 7.27. 
-          Focused on building practical engineering solutions across software, ML, and embedded systems.
+          3rd-year CSE undergraduate at Amrita Vishwa Vidyapeetham, Coimbatore, building practical
+          engineering solutions across software, machine learning and embedded systems — and
+          learning fast along the way.
         </p>
+        <div class="hero-badges">
+          <span class="badge"><span class="badge-dot live"></span> Open to internships</span>
+          <span class="badge">📍 Coimbatore, India</span>
+          <span class="badge">🎓 CGPA 7.27</span>
+        </div>
         <div class="hero-buttons">
           <a href="#projects" class="btn btn-primary">View Projects</a>
-          <a href="https://github.com/Radha-Krishna-19" target="_blank" class="btn btn-secondary">GitHub Profile</a>
+          <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="btn btn-secondary">Download Resume ↓</a>
+        </div>
+        <div class="hero-socials">
+          <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+          </a>
+          <a href="mailto:pradhakrishna594@gmail.com" class="icon-btn" aria-label="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+          </a>
         </div>
       </div>
-      <div class="hero-image">
-        <div class="profile-pic"></div>
+      <div class="hero-visual">
+        <div class="hero-frame">
+          <div class="hero-frame-ring"></div>
+          <div class="profile-pic"></div>
+          <div class="float-card card-1">
+            <span class="fc-icon">🏆</span>
+            <div>
+              <div class="fc-num">SIH '24</div>
+              <div class="fc-label">Hackathon Participant</div>
+            </div>
+          </div>
+          <div class="float-card card-2">
+            <span class="fc-icon">💻</span>
+            <div>
+              <div class="fc-num">9+</div>
+              <div class="fc-label">Projects Built</div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="scroll-cue">
+      <div class="mouse"><span></span></div>
+      Scroll
     </div>
   </section>
 
   <!-- About -->
   <section id="about" class="reveal-section">
-    <h2 class="section-title">About</h2>
+    <div class="section-head">
+      <span class="section-kicker">Get to know me</span>
+      <h2 class="section-title">About Me</h2>
+    </div>
     <div class="about-content">
       <div class="about-text">
         <p>
-          P.M. Radha Krishna is a 3rd year CSE student at Amrita Vishwa Vidyapeetham, Coimbatore, currently focused on broadening technical knowledge across multiple engineering domains.
+          I'm a 3rd-year CSE student at <strong>Amrita Vishwa Vidyapeetham, Coimbatore</strong>,
+          currently broadening my technical base across software engineering, machine learning
+          and embedded systems before specialising further.
         </p>
         <p>
-          Academic highlights include a CGPA of 7.27, participation in Smart India Hackathon (SIH) 2024 with a sun-tracking solar panel system using MATLAB, and the Clear Skies Challenge 2024 with a pollution-minimised path finder with Dijkstra's algorithm and cost-effective Pavegen-style tiles.
+          My academic highlights include a <strong>CGPA of 7.27</strong>, building a sun-tracking
+          solar panel system in MATLAB for <strong>Smart India Hackathon (SIH) 2024</strong>, and
+          designing a pollution-minimised path finder using Dijkstra's algorithm with
+          cost-effective Pavegen-style tiles for the <strong>Clear Skies Challenge 2024</strong>.
         </p>
         <p>
-          Beyond academics, active involvement in campus events, NSS activities, and creative hobbies like chess, drawing, and guitar help maintain a balanced profile.
+          Outside academics, I'm active in campus events and NSS service, and I keep a balanced
+          creative side through chess, drawing and playing the guitar.
         </p>
+
+        <div class="edu-card">
+          <div class="edu-icon">🎓</div>
+          <div>
+            <h4>B.Tech, Computer Science &amp; Engineering</h4>
+            <p>Amrita Vishwa Vidyapeetham, Coimbatore</p>
+            <p class="edu-meta">2023 – 2027 (Expected) · CGPA 7.27</p>
+          </div>
+        </div>
+
+        <div class="hobby-row">
+          <span class="hobby-chip">♟️ Chess</span>
+          <span class="hobby-chip">🎨 Drawing</span>
+          <span class="hobby-chip">🎸 Guitar</span>
+          <span class="hobby-chip">🙌 NSS Volunteer</span>
+        </div>
       </div>
 
       <div class="stats">
         <div class="stat-item">
-          <h3 data-count="7.27">7.27</h3>
+          <h3 data-count="7.27">0</h3>
           <p>Current CGPA</p>
         </div>
         <div class="stat-item">
-          <h3 data-count="2024">2024</h3>
-          <p>SIH & Clear Skies Participation</p>
+          <h3 data-count="2024">0</h3>
+          <p>SIH &amp; Clear Skies</p>
         </div>
         <div class="stat-item">
-          <h3 data-count="3">3</h3>
-          <p>Years of Coding</p>
+          <h3 data-count="3">0</h3>
+          <p>Years Coding</p>
         </div>
       </div>
     </div>
@@ -101,45 +176,100 @@
 
   <!-- Skills -->
   <section id="skills" class="reveal-section">
-    <h2 class="section-title">Skills</h2>
+    <div class="section-head">
+      <span class="section-kicker">What I work with</span>
+      <h2 class="section-title">Skills &amp; Tools</h2>
+      <p class="section-sub">A growing toolkit across languages, web development and applied engineering concepts.</p>
+    </div>
     <div class="skills-grid">
       <div class="skill-category">
-        <h3>Programming Languages</h3>
-        <div class="skill-tags">
-          <span>Python</span>
-          <span>C</span>
-          <span>Java</span>
-          <span>C++ (Beginner)</span>
-          <span>Haskell (Familiar)</span>
+        <h3>💻 Programming Languages</h3>
+        <div class="skill-row">
+          <i class="skill-icon devicon-python-plain"></i>
+          <span class="skill-name">Python</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <i class="skill-icon devicon-c-plain"></i>
+          <span class="skill-name">C</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <i class="skill-icon devicon-java-plain"></i>
+          <span class="skill-name">Java</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <i class="skill-icon devicon-cplusplus-plain"></i>
+          <span class="skill-name">C++<span class="skill-note">Beginner</span></span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <i class="skill-icon devicon-haskell-plain"></i>
+          <span class="skill-name">Haskell<span class="skill-note">Familiar</span></span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i></i><i></i><i></i></span>
         </div>
       </div>
 
       <div class="skill-category">
-        <h3>Web & Frontend</h3>
-        <div class="skill-tags">
-          <span>HTML</span>
-          <span>CSS</span>
-          <span>JavaScript</span>
-          <span>React (Basic)</span>
+        <h3>🌐 Web &amp; Frontend</h3>
+        <div class="skill-row">
+          <i class="skill-icon devicon-html5-plain"></i>
+          <span class="skill-name">HTML</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <i class="skill-icon devicon-css3-plain"></i>
+          <span class="skill-name">CSS</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <i class="skill-icon devicon-javascript-plain"></i>
+          <span class="skill-name">JavaScript</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <i class="skill-icon devicon-react-original"></i>
+          <span class="skill-name">React<span class="skill-note">Basic</span></span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i></i><i></i><i></i></span>
         </div>
       </div>
 
       <div class="skill-category">
-        <h3>Tools & Concepts</h3>
-        <div class="skill-tags">
-          <span>Data Structures & Algorithms</span>
-          <span>Git & GitHub</span>
-          <span>Computer Vision</span>
-          <span>Web Development</span>
-          <span>AI and ML</span>
+        <h3>🧠 Tools &amp; Concepts</h3>
+        <div class="skill-row">
+          <span class="skill-icon">🧩</span>
+          <span class="skill-name">Data Structures &amp; Algorithms</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <i class="skill-icon devicon-git-plain"></i>
+          <span class="skill-name">Git &amp; GitHub</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-icon">👁️</span>
+          <span class="skill-name">Computer Vision</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-icon">🤖</span>
+          <span class="skill-name">AI &amp; Machine Learning</span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
         </div>
       </div>
 
       <div class="skill-category">
-        <h3>Cloud & Credentials</h3>
-        <div class="skill-tags">
-          <span>AWS Cloud Practitioner</span>
-          <span>CIR, Amrita</span>
+        <h3>☁️ Cloud &amp; Credentials</h3>
+        <div class="skill-row">
+          <i class="skill-icon devicon-amazonwebservices-plain-wordmark" style="color:#f5b84e"></i>
+          <span class="skill-name">AWS Cloud Practitioner<span class="skill-note">Certified</span></span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i></span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-icon">📜</span>
+          <span class="skill-name">CIR, Amrita<span class="skill-note">Certification</span></span>
+          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i></span>
         </div>
       </div>
     </div>
@@ -147,150 +277,263 @@
 
   <!-- Projects -->
   <section id="projects" class="reveal-section">
-    <h2 class="section-title">Technical Projects</h2>
+    <div class="section-head">
+      <span class="section-kicker">Things I've built</span>
+      <h2 class="section-title">Technical Projects</h2>
+      <p class="section-sub">A mix of software, machine learning and systems experiments — from full engines to weekend builds.</p>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="software">Software</button>
+      <button class="filter-btn" data-filter="ml">ML &amp; CV</button>
+      <button class="filter-btn" data-filter="embedded">Embedded</button>
+      <button class="filter-btn" data-filter="web">Web</button>
+    </div>
+
     <div class="projects-grid">
-      <div class="project-card">
-        <div class="project-image campus-bites"></div>
+      <div class="project-card reveal-item" data-category="software">
+        <div class="project-top grad-1">
+          <span class="project-glyph">📋</span>
+          <span class="project-featured-badge">Featured</span>
+        </div>
         <div class="project-content">
           <h3>Attendance Manager (CLI)</h3>
-          <p>
-            Python-based CLI tool to automate ID card attendance marking for classes and events, with support for scanning IDs and manual edits.
-          </p>
-          <p class="project-tags">Python • CLI • Automation</p>
+          <p>Python-based CLI tool to automate ID-card attendance marking for classes and events, with support for scanning IDs and manual edits.</p>
+          <div class="project-tags"><span>Python</span><span>CLI</span><span>Automation</span></div>
+          <div class="project-footer">
+            <span class="project-status">✅ Completed</span>
+            <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn" style="width:36px;height:36px" aria-label="View on GitHub">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="project-card">
-        <div class="project-image pdm"></div>
+      <div class="project-card reveal-item" data-category="software">
+        <div class="project-top grad-2">
+          <span class="project-glyph">♟️</span>
+          <span class="project-featured-badge">Featured</span>
+        </div>
         <div class="project-content">
           <h3>Stockfish-style Chess Engine</h3>
-          <p>
-            Custom chess engine in Python capable of playing full games against users, inspired by Stockfish evaluation and search ideas.
-          </p>
-          <p class="project-tags">Python • Chess Engine</p>
+          <p>Custom chess engine in Python capable of playing full games against users, inspired by Stockfish's evaluation and search ideas.</p>
+          <div class="project-tags"><span>Python</span><span>Search Algorithms</span><span>Chess</span></div>
+          <div class="project-footer">
+            <span class="project-status">✅ Completed</span>
+            <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn" style="width:36px;height:36px" aria-label="View on GitHub">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="project-card">
-        <div class="project-image sih"></div>
+      <div class="project-card reveal-item" data-category="ml">
+        <div class="project-top grad-3">
+          <span class="project-glyph">⚙️</span>
+          <span class="project-featured-badge">Featured</span>
+        </div>
         <div class="project-content">
-          <h3>Predictive Maintenance (Internship)</h3>
-          <p>
-            Ongoing ML-based anomaly prediction model for industrial machines at Sybergate Solutions, focusing on Chlor-Alkali processes.
-          </p>
-          <p class="project-tags">Machine Learning • Industry • Internship</p>
+          <h3>Predictive Maintenance</h3>
+          <p>Ongoing ML-based anomaly prediction model for industrial machines at Sybergate Solutions, focused on Chlor-Alkali processes.</p>
+          <div class="project-tags"><span>Machine Learning</span><span>Industry</span><span>Internship</span></div>
+          <div class="project-footer">
+            <span class="project-status">🟡 Ongoing · Internship</span>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="project-card">
-        <div class="project-image"></div>
-        <div class="project-content">
-          <h3>Other Engineering Projects</h3>
-          <ul>
-            <li>Case study on how Python functions in "Spotube" work.</li>
-            <li>Local chess UI linked to the original chess website.</li>
-            <li>Plant monitoring system using TinkerCAD.</li>
-            <li>Notepad in Python using ropes, piece tables, and stack.</li>
-            <li>Computer vision project: text detection to LaTeX using YOLO.</li>
-            <li>Portfolio website and Amrita canteen website with nutrition info, balance tracking, AI suggestions, ML recommendations, and protein intake planning.</li>
-          </ul>
-        </div>
+    <h3 class="more-heading">More Builds</h3>
+    <div class="mini-grid">
+      <div class="mini-card reveal-item" data-category="web">
+        <span class="mini-icon">🎧</span>
+        <h4>Spotube Case Study</h4>
+        <p>Reverse-engineered case study on how Python functions power the Spotube music app.</p>
       </div>
+      <div class="mini-card reveal-item" data-category="web">
+        <span class="mini-icon">♟️</span>
+        <h4>Local Chess UI</h4>
+        <p>A local chess interface linked to and playable against the original chess engine website.</p>
+      </div>
+      <div class="mini-card reveal-item" data-category="embedded">
+        <span class="mini-icon">🌱</span>
+        <h4>Plant Monitoring System</h4>
+        <p>Sensor-driven plant health monitoring circuit prototyped and simulated in TinkerCAD.</p>
+      </div>
+      <div class="mini-card reveal-item" data-category="software">
+        <span class="mini-icon">📝</span>
+        <h4>Python Notepad</h4>
+        <p>A from-scratch notepad app in Python built using ropes, piece tables and stacks for efficient text editing.</p>
+      </div>
+      <div class="mini-card reveal-item" data-category="ml">
+        <span class="mini-icon">🔎</span>
+        <h4>Text Detection to LaTeX</h4>
+        <p>Computer vision pipeline using YOLO to detect handwritten/printed text and convert it into LaTeX.</p>
+      </div>
+      <div class="mini-card reveal-item" data-category="web">
+        <span class="mini-icon">🍽️</span>
+        <h4>Amrita Canteen Website</h4>
+        <p>Concept canteen platform with nutrition info, balance tracking, AI meal suggestions and protein-intake planning.</p>
+      </div>
+    </div>
+
+    <div class="projects-cta">
+      <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="btn btn-secondary">See more on GitHub →</a>
+    </div>
+  </section>
+
+  <!-- GitHub Activity -->
+  <section id="github" class="reveal-section">
+    <div class="section-head">
+      <span class="section-kicker">Live from GitHub</span>
+      <h2 class="section-title">GitHub Activity</h2>
+    </div>
+    <div class="github-section">
+      <div class="github-cards" id="githubCards">
+        <img src="https://github-readme-stats.vercel.app/api?username=Radha-Krishna-19&show_icons=true&hide_title=true&count_private=true&theme=dark&bg_color=00000000&border_color=5b8cff&title_color=5b8cff&icon_color=2dd4c8&text_color=8c94a8" alt="Radha Krishna's GitHub stats" onerror="this.closest('.github-cards').classList.add('fallback'); this.remove();" />
+        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Radha-Krishna-19&layout=compact&hide_title=true&theme=dark&bg_color=00000000&border_color=5b8cff&title_color=5b8cff&text_color=8c94a8" alt="Most used languages" onerror="this.remove();" />
+      </div>
+      <p class="github-fallback-note" id="githubFallbackNote">Live stats card is served by a free third-party API and may occasionally be unavailable — head to the profile directly if it doesn't load.</p>
+      <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="btn btn-primary">Visit GitHub Profile</a>
     </div>
   </section>
 
   <!-- Achievements -->
   <section id="achievements" class="reveal-section">
-    <h2 class="section-title">Achievements & Leadership</h2>
-    <div class="skills-grid">
-      <div class="skill-category">
-        <h3>Academic & Competitions</h3>
-        <ul>
-          <li>CGPA: 7.27.</li>
-          <li>Smart India Hackathon (SIH) 2024 – solar panel tracking system using MATLAB.</li>
-          <li>Clear Skies Challenge 2024 – pollution-minimised path finder and cost-effective Pavegen-style tiles.</li>
-          <li>AWS Cloud Practitioner Certificate from CIR, Amrita.</li>
-        </ul>
-      </div>
+    <div class="section-head">
+      <span class="section-kicker">Milestones</span>
+      <h2 class="section-title">Achievements &amp; Leadership</h2>
+    </div>
 
-      <div class="skill-category">
-        <h3>Leadership & Service</h3>
-        <ul>
-          <li>Gokulashtami campus decoration coordinator.</li>
-          <li>NSS leader for railway station and government school painting projects (Swachhata Hi Seva).</li>
-          <li>Participation in college chess and drawing competitions.</li>
-        </ul>
+    <div class="timeline">
+      <div class="timeline-item reveal-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-tag">2024 · Hackathon</span>
+          <h4>Smart India Hackathon (SIH) 2024</h4>
+          <p>Built a sun-tracking solar panel system using MATLAB as part of a national-level hackathon team.</p>
+        </div>
       </div>
-
-      <div class="skill-category">
-        <h3>Interests & Hobbies</h3>
-        <ul>
-          <li>Guitar playing as a creative hobby.</li>
-          <li>Chess and drawing for strategic and artistic thinking.</li>
-        </ul>
+      <div class="timeline-item reveal-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-tag">2024 · Challenge</span>
+          <h4>Clear Skies Challenge 2024</h4>
+          <p>Designed a pollution-minimised path finder using Dijkstra's algorithm alongside cost-effective Pavegen-style energy tiles.</p>
+        </div>
       </div>
-
-      <div class="skill-category">
-        <h3>Career Focus</h3>
-        <p>
-          Currently exploring multiple tech fields and building a broad base of skills before specialising, keeping options open across software, ML, and systems work.
-        </p>
+      <div class="timeline-item reveal-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-tag">Certification</span>
+          <h4>AWS Cloud Practitioner</h4>
+          <p>Earned via CIR, Amrita — foundational certification in AWS cloud concepts and services.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-tag">Leadership · NSS</span>
+          <h4>NSS Lead — Swachhata Hi Seva</h4>
+          <p>Led volunteer teams for railway station and government school painting projects under the National Service Scheme.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-tag">Campus Life</span>
+          <h4>Gokulashtami Decoration Coordinator</h4>
+          <p>Coordinated campus decorations for the Gokulashtami festival celebration.</p>
+        </div>
+      </div>
+      <div class="timeline-item reveal-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <span class="timeline-tag">Competitions</span>
+          <h4>College Chess &amp; Drawing Competitions</h4>
+          <p>Regular participant in campus chess and drawing competitions, balancing strategic and artistic thinking.</p>
+        </div>
       </div>
     </div>
+
+    <p class="career-quote">
+      "Currently exploring multiple tech fields and building a broad base of skills before
+      specialising — keeping options open across software, ML and systems work."
+    </p>
   </section>
 
   <!-- Contact -->
   <section id="contact" class="reveal-section">
-    <h2 class="section-title">Contact</h2>
-    <p class="contact-subtitle">
-      Open to internships, collaborations, and project discussions across software, ML, and systems.  
-      Reach out or explore work on GitHub.
-    </p>
-
-    <!-- ✅ RESUME DOWNLOAD - FIXED TO RESUME.docx -->
-    <div style="text-align: center; margin-bottom: 3rem;">
-      <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx"
-         class="btn btn-primary"
-         style="display: inline-flex; align-items: center; gap: 10px; font-size: 1.1rem; padding: 15px 35px;">
-        📄 Download Resume
-      </a>
+    <div class="section-head">
+      <span class="section-kicker">Let's talk</span>
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="section-sub">Open to internships, collaborations, and project discussions across software, ML and systems.</p>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 800px; margin: 0 auto; padding: 0 5%;">
-      <!-- Info -->
-      <div style="text-align: center;">
-        <h3 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: #4ecdc4;">Get In Touch</h3>
-        <p style="font-size: 1.1rem; color: #b8b8b8; margin-bottom: 2rem; line-height: 1.6;">
-          <strong>Email:</strong><br>
-          <a href="mailto:pradhakrishna594@gmail.com"
-             style="color: #4ecdc4; font-size: 1.2rem; text-decoration: none; font-weight: 500;">
-            pradhakrishna594@gmail.com
-          </a>
-        </p>
-        <p style="font-size: 1.1rem; color: #b8b8b8; line-height: 1.6;">
-          <strong>GitHub:</strong><br>
-          <a href="https://github.com/Radha-Krishna-19" target="_blank"
-             style="color: #4ecdc4; font-weight: 500;">
-            Radha-Krishna-19
-          </a>
-        </p>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Contact Details</h3>
+        <p>Feel free to reach out for opportunities, collaborations, or just to talk tech — I usually reply within a day or two.</p>
+
+        <div class="contact-line">
+          <span class="ci">✉️</span>
+          <div>
+            <small>Email</small>
+            <a href="mailto:pradhakrishna594@gmail.com">pradhakrishna594@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-line">
+          <span class="ci">🐙</span>
+          <div>
+            <small>GitHub</small>
+            <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener">Radha-Krishna-19</a>
+          </div>
+        </div>
+        <div class="contact-line">
+          <span class="ci">📍</span>
+          <div>
+            <small>Location</small>
+            <span class="ct">Coimbatore, Tamil Nadu, India</span>
+          </div>
+        </div>
+
+        <div class="contact-resume">
+          <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="btn btn-primary">📄 Download Resume</a>
+        </div>
       </div>
 
-      <!-- Form -->
-      <form id="contact-form" class="contact-form" style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <form id="contact-form" class="contact-form">
         <input type="text" name="title" placeholder="Subject / Title *" required />
-        <input type="text" name="name" placeholder="Your Name *" required />
-        <input type="email" name="email" placeholder="Your Email *" required />
+        <div class="form-row">
+          <input type="text" name="name" placeholder="Your Name *" required />
+          <input type="email" name="email" placeholder="Your Email *" required />
+        </div>
         <textarea name="message" rows="5" placeholder="Your Message *" required></textarea>
-        <button type="submit" class="btn btn-primary" style="width: fit-content; align-self: flex-start;">
-          Send Message
-        </button>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+        <div id="successMsg" class="success-message">
+          ✅ Message sent successfully! Will get back to you soon.
+        </div>
       </form>
     </div>
-
-    <div id="successMsg" class="success-message">
-      ✅ Message sent successfully! Will get back to you soon.
-    </div>
   </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© <span id="year"></span> P.M. Radha Krishna · Built with HTML, CSS &amp; JavaScript</p>
+      <div class="footer-socials">
+        <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+        </a>
+        <a href="mailto:pradhakrishna594@gmail.com" class="icon-btn" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+        </a>
+        <a href="#home" class="icon-btn back-to-top" aria-label="Back to top">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
