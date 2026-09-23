@@ -1009,6 +1009,7 @@ section {
 .grad-1 { background: linear-gradient(135deg, #5b8cff, #2dd4c8); }
 .grad-2 { background: linear-gradient(135deg, #a78bfa, #5b8cff); }
 .grad-3 { background: linear-gradient(135deg, #f5b84e, #ff6b6b); }
+.grad-4 { background: linear-gradient(135deg, #2dd4c8, #a78bfa); }
 
 .project-content {
   padding: 1.5rem;
