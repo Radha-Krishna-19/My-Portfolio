@@ -401,7 +401,19 @@ function initWork() {
   const bar = $('#workProgress');
   if (!track || !pin) return;
 
-  initDust($$('.work-card', track));
+  // Same motion language as the rest of the site:
+  // visual panel wipes up (like the portrait), title rises letter by letter (like section titles),
+  // details fade up in sequence, and the big number drifts gently with scroll.
+  $$('.work-card.big', track).forEach((card) => {
+    const visual = card.querySelector('.work-visual');
+    const title = card.querySelector('.work-title');
+    const chars = title ? maskTitle(title) : [];
+    const rest = card.querySelectorAll('.project-status, .work-summary, .work-cols > div, .project-tags, .work-foot, .work-spec li');
+    const tl = gsap.timeline({ scrollTrigger: { trigger: card, start: 'top 92%', once: true } });
+    tl.fromTo(visual, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'expo.inOut' }, 0)
+      .from(chars, { yPercent: 105, duration: 0.8, ease: 'expo.out', stagger: { amount: 0.3 } }, 0.25)
+      .from(rest, { y: 22, opacity: 0, duration: 0.8, ease: 'expo.out', stagger: 0.05 }, 0.45);
+  });
 }
 
 // ===============================
@@ -934,7 +946,6 @@ function init() {
   initFooter();
   initMagnetic();
   initProjectFilter();
-  initDetail();
   initContactForm();
 
   const start = () => runIntro();

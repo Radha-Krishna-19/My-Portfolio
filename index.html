@@ -194,63 +194,79 @@
         </div>
 
         <div class="work-track" id="workTrack">
-          <article class="work-card" data-cursor="view" tabindex="0" aria-label="Open project details">
+          <article class="work-card big">
             <div class="work-visual">
               <span class="work-num">01</span>
               <span class="work-chip mono">Backend · Web</span>
               <ul class="work-spec"><li><span class="mono">Stack</span><span>React · Node/Express · MongoDB</span></li><li><span class="mono">Access</span><span>Role-based access control</span></li><li><span class="mono">Core</span><span>Bookings + reallocation engine</span></li><li><span class="mono">Ops</span><span>Docker Compose · CI · tests</span></li></ul>
             </div>
             <div class="work-body">
-              <h3>Campus Resource Manager</h3>
-              <p>Hall booking and reallocation platform for campus. It started as a team project; I rebuilt it in my own repo with role-based access, the booking and reallocation engine, forecasting reports, audit logs, Docker setup, GitHub Actions CI and tests.</p>
-              <div class="project-tags"><span>Node.js</span><span>Express</span><span>React</span><span>MongoDB</span><span>Docker</span></div>
-              <div class="work-foot"><span class="project-status mono">Shipped</span>
-                <a href="https://github.com/Radha-Krishna-19/campus-resource-management" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></div>
+              <span class="project-status mono">Shipped</span>
+              <h3 class="work-title">Campus Resource Manager</h3>
+              <p class="work-summary">Hall booking and reallocation platform for campus, rebuilt in my own repo after starting as a team project.</p>
+              <div class="work-cols">
+                <div><h4 class="mono">What it does</h4><p>Faculty and coordinators book halls; when a booking clashes or is cancelled, the reallocation engine moves it to a suitable free room. Admins get usage reports and forecasts, and every change is recorded in an audit log.</p></div>
+                <div><h4 class="mono">What I built</h4><ul class="work-built"><li>Role-based access middleware for admin, coordinator and faculty roles</li><li>Booking core and the reallocation engine</li><li>Forecasting reports and audit logs</li><li>Docker Compose setup, GitHub Actions CI and automated tests</li></ul></div>
+              </div>
+              <div class="project-tags"><span>Node.js</span><span>Express</span><span>React</span><span>MongoDB</span><span>Docker</span><span>GitHub Actions</span></div>
+              <div class="work-foot"><span class="work-links"><a href="https://github.com/Radha-Krishna-19/campus-resource-management" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
             </div>
           </article>
-          <article class="work-card" data-cursor="view" tabindex="0" aria-label="Open project details">
+          <article class="work-card big">
             <div class="work-visual">
               <span class="work-num">02</span>
               <span class="work-chip mono">Full-stack · Web</span>
               <ul class="work-spec"><li><span class="mono">Stack</span><span>React · FastAPI · MongoDB</span></li><li><span class="mono">Auth</span><span>JWT · bcrypt</span></li><li><span class="mono">Realtime</span><span>Socket.IO order updates</span></li><li><span class="mono">Portals</span><span>Student · crew · management</span></li></ul>
             </div>
             <div class="work-body">
-              <h3>Campus Bites</h3>
-              <p>Canteen ordering platform (team of 3) with separate portals for students, canteen crew and management, JWT login, live order tracking over Socket.IO and token-based pickup.</p>
-              <div class="project-tags"><span>FastAPI</span><span>React</span><span>MongoDB</span><span>Socket.IO</span></div>
-              <div class="work-foot"><span class="project-status mono">Shipped</span>
-                <span class="work-links"><a href="https://radha-krishna-19.github.io/Campus-Bites/" target="_blank" rel="noopener" class="work-link live">Live site <span>↗</span></a><a href="https://github.com/Radha-Krishna-19/Campus-Bites" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
+              <span class="project-status mono">Shipped</span>
+              <h3 class="work-title">Campus Bites</h3>
+              <p class="work-summary">Canteen ordering platform for campus, built as a team of 3.</p>
+              <div class="work-cols">
+                <div><h4 class="mono">What it does</h4><p>Students order from campus canteens and pick up with a token; the canteen crew sees orders arrive live and updates their status; management handles menus and canteens. A demo mode runs the whole app in the browser.</p></div>
+                <div><h4 class="mono">What I built</h4><ul class="work-built"><li>Three role-based portals: student, crew and management</li><li>JWT login with bcrypt-hashed passwords</li><li>Live order tracking over Socket.IO</li><li>Deployed on GitHub Pages with an in-browser demo mode</li></ul></div>
+              </div>
+              <div class="project-tags"><span>FastAPI</span><span>React</span><span>MongoDB</span><span>Socket.IO</span><span>JWT</span></div>
+              <div class="work-foot"><span class="work-links"><a href="https://radha-krishna-19.github.io/Campus-Bites/" target="_blank" rel="noopener" class="work-link live">Live site <span>↗</span></a><a href="https://github.com/Radha-Krishna-19/Campus-Bites" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
             </div>
           </article>
-          <article class="work-card" data-cursor="view" tabindex="0" aria-label="Open project details">
+          <article class="work-card big">
             <div class="work-visual">
               <span class="work-num">03</span>
               <span class="work-chip mono">Software · Algorithms</span>
               <ul class="work-spec"><li><span class="mono">Rules</span><span>Fully legal moves · castling · en passant</span></li><li><span class="mono">Search</span><span>Minimax · alpha-beta pruning</span></li><li><span class="mono">Eval</span><span>Material + piece-square tables</span></li><li><span class="mono">UI</span><span>pygame · play vs engine</span></li></ul>
             </div>
             <div class="work-body">
-              <h3>Chess Engine</h3>
-              <p>A chess engine in Python with no chess libraries: board representation, legal move generation including castling, en passant and promotion, minimax search with alpha-beta pruning, and a pygame app to play against it. I started from my own move generator and I'm working through the rest module by module.</p>
+              <span class="project-status mono">In progress</span>
+              <h3 class="work-title">Chess Engine</h3>
+              <p class="work-summary">A chess engine in Python with no chess libraries.</p>
+              <div class="work-cols">
+                <div><h4 class="mono">What it does</h4><p>Every rule is implemented by hand: legal move generation including castling, en passant and promotion, plus draws by repetition and the 50-move rule. The engine searches with minimax and alpha-beta pruning, and a pygame app lets you play against it.</p></div>
+                <div><h4 class="mono">What I built</h4><ul class="work-built"><li>Started from my own move generator</li><li>Board representation and legal-move filtering</li><li>Search with alpha-beta pruning and a static evaluation</li><li>pygame front end that talks to the engine over a small text protocol</li></ul></div>
+              </div>
               <div class="project-tags"><span>Python</span><span>Algorithms</span><span>pygame</span><span>pytest</span></div>
-              <div class="work-foot"><span class="project-status mono">In progress</span>
-                <a href="https://github.com/Radha-Krishna-19/Stockfish-Style-Chess-Engine" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></div>
+              <div class="work-foot"><span class="work-links"><a href="https://github.com/Radha-Krishna-19/Stockfish-Style-Chess-Engine" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
             </div>
           </article>
-          <article class="work-card" data-cursor="view" tabindex="0" aria-label="Open project details">
+          <article class="work-card big">
             <div class="work-visual">
               <span class="work-num">04</span>
               <span class="work-chip mono">Team project · ML</span>
               <ul class="work-spec"><li><span class="mono">Input</span><span>Webcam → MediaPipe landmarks</span></li><li><span class="mono">Model</span><span>BiLSTM sign classifier</span></li><li><span class="mono">Backend</span><span>FastAPI + WebSockets</span></li><li><span class="mono">Frontend</span><span>React</span></li></ul>
             </div>
             <div class="work-body">
-              <h3>Silent Voice — Sign Language Translator</h3>
-              <p>Indian Sign Language ↔ English translator built with a teammate. MediaPipe extracts hand landmarks from the webcam, a BiLSTM model trained on the INCLUDE dataset classifies signs, and a FastAPI WebSocket backend streams results to a React app.</p>
-              <div class="project-tags"><span>Python</span><span>PyTorch</span><span>FastAPI</span><span>React</span></div>
-              <div class="work-foot"><span class="project-status mono">In progress</span>
-                <span class="work-links"><a href="https://radha-krishna-19.github.io/Silent-Voice/" target="_blank" rel="noopener" class="work-link live">Live site <span>↗</span></a><a href="https://github.com/Radha-Krishna-19/Silent-Voice" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
+              <span class="project-status mono">In progress</span>
+              <h3 class="work-title">Silent Voice</h3>
+              <p class="work-summary">Indian Sign Language ↔ English translator, built as a team of 2.</p>
+              <div class="work-cols">
+                <div><h4 class="mono">What it does</h4><p>A webcam feed is turned into hand and body landmarks with MediaPipe; a BiLSTM model trained on the INCLUDE dataset classifies the signs, and recognised signs are turned into English sentences. It also works the other way, from English to sign glosses.</p></div>
+                <div><h4 class="mono">What I built</h4><ul class="work-built"><li>The BiLSTM sign-recognition model</li><li>The full-stack app: FastAPI backend and React frontend</li><li>Live streaming between them over WebSockets</li><li>The step that turns recognised signs into sentences</li></ul></div>
+              </div>
+              <div class="project-tags"><span>Python</span><span>PyTorch</span><span>MediaPipe</span><span>FastAPI</span><span>React</span></div>
+              <div class="work-foot"><span class="work-links"><a href="https://radha-krishna-19.github.io/Silent-Voice/" target="_blank" rel="noopener" class="work-link live">Live site <span>↗</span></a><a href="https://github.com/Radha-Krishna-19/Silent-Voice" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
             </div>
           </article>
-          <a class="work-card work-end" href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" data-cursor="link">
+          <a class="work-card work-end" href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener">
             <span class="mono">More on GitHub</span>
             <span class="work-end-big">See all<br>repos <span class="accent">↗</span></span>
           </a>
