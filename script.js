@@ -901,6 +901,9 @@ function initTheme() {
     label();
   };
   label();
+  // fetch the ink animation quietly after the page has loaded, so the first click is instant
+  const prefetch = () => ['assets/ink-flow-land.webp', 'assets/ink-flow-port.webp'].forEach((src) => { const i = new Image(); i.src = src; });
+  if (document.readyState === 'complete') setTimeout(prefetch, 1500); else addEventListener('load', () => setTimeout(prefetch, 1500));
   btn.addEventListener('click', (e) => {
     const toLight = root.dataset.theme !== 'light';
     const r = btn.getBoundingClientRect();

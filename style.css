@@ -1015,16 +1015,49 @@ main { position: relative; z-index: 1; }
 [data-theme="light"] .live-dot { background: var(--accent-fg); }
 [data-theme="light"] #scroll-progress { background: var(--accent-fg); }
 
-/* ---------- ink-splash theme transition (View Transitions API) ---------- */
+/* ---------- ink theme transition: a pre-simulated marbled ink flow, played as a mask ---------- */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 ::view-transition-new(root) {
-  -webkit-mask-image: url(assets/ink.png); mask-image: url(assets/ink.png);
+  -webkit-mask-image: url(assets/ink-flow-land.webp); mask-image: url(assets/ink-flow-land.webp);
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-  animation: ink-spread 1.15s cubic-bezier(.65, 0, .25, 1) forwards;
+  -webkit-mask-size: 100% 3600%; mask-size: 100% 3600%;
+  animation: ink-flow-land 1.3s steps(35, jump-none) forwards;
 }
-@keyframes ink-spread {
-  from { -webkit-mask-size: 0 0; mask-size: 0 0; -webkit-mask-position: var(--vx) var(--vy); mask-position: var(--vx) var(--vy); }
-  to { -webkit-mask-size: 420vmax 420vmax; mask-size: 420vmax 420vmax;
-       -webkit-mask-position: calc(var(--vx) - 210vmax) calc(var(--vy) - 210vmax); mask-position: calc(var(--vx) - 210vmax) calc(var(--vy) - 210vmax); }
+@keyframes ink-flow-land {
+  from { -webkit-mask-position: 0 0%; mask-position: 0 0%; }
+  to { -webkit-mask-position: 0 100%; mask-position: 0 100%; }
+}
+@media (orientation: portrait) {
+  ::view-transition-new(root) {
+    -webkit-mask-image: url(assets/ink-flow-port.webp); mask-image: url(assets/ink-flow-port.webp);
+    -webkit-mask-size: 3600% 100%; mask-size: 3600% 100%;
+    animation-name: ink-flow-port;
+  }
+}
+@keyframes ink-flow-port {
+  from { -webkit-mask-position: 0% 0; mask-position: 0% 0; }
+  to { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
 }
 @media (prefers-reduced-motion: reduce) { ::view-transition-new(root) { animation-duration: .01s; } }
+
+/* Footer wordmark: solid low-contrast fill (outlines exposed Syne's overlapping contours), always fits */
+.footer-big { color: var(--card-2); -webkit-text-stroke: 0; opacity: 1; font-size: clamp(40px, 9.6vw, 190px); letter-spacing: -.035em; }
+[data-theme="light"] .footer-big { color: #e3ded2; }
+
+/* v21 — sizes derived from the real (wide) Syne metrics: "KRISHNA." ≈ 8.1 × font-size, "RADHA KRISHNA" ≈ 13.7 × font-size */
+.hero-title { font-size: clamp(34px, 10.4vw, 54px); }
+@media (min-width: 901px) {
+  .hero-title { font-size: clamp(44px, 5.2vw, 100px); }
+  .hero-right { width: min(30vw, 100%); }
+}
+.footer-big { font-size: clamp(22px, 6.3vw, 125px); }
+
+/* v22 — phones: single-column hero (an earlier desktop rule leaked into mobile) */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr !important; }
+  .hero-left { width: auto !important; }
+}
+/* Real Syne is wide: "HACKATHONS" ≈ 12× font-size, so cap titles to the phone width */
+@media (max-width: 600px) {
+  .section-title, .section-title.big { font-size: 7.1vw; }
+}
