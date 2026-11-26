@@ -812,3 +812,12 @@ main { position: relative; z-index: 1; }
 .work-card { will-change: auto; }
 .work-visual::after { will-change: auto; }
 .skill-foot { color: var(--muted); font-size: 11px; margin-top: 16px; }
+
+/* v11 — portrait takes a real half of the hero, centred in its column */
+@media (min-width: 901px) {
+  .hero-grid { grid-template-columns: 1fr 1fr; gap: clamp(24px, 3vw, 56px); }
+  .hero-title { font-size: clamp(54px, 7.6vw, 140px); }
+  .hero-line-2 { padding-left: .35em; }
+  .hero-right { justify-self: center; width: min(640px, 100%); }
+}
+@media (min-width: 901px) { .hero-right { width: min(640px, 100%, 70vh); } }
