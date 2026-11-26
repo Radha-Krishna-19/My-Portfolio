@@ -4,585 +4,485 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>P.M. Radha Krishna — Engineering Portfolio</title>
-  <meta name="description" content="P.M. Radha Krishna — CSE undergraduate at Amrita Vishwa Vidyapeetham building across software, machine learning and embedded systems." />
+  <meta name="description" content="P.M. Radha Krishna — CSE undergraduate at Amrita Vishwa Vidyapeetham building applied AI/ML and full-stack systems end to end." />
+  <meta name="theme-color" content="#08080b" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%235b8cff'/%3E%3Ctext x='50' y='66' font-size='50' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3ERK%3C/text%3E%3C/svg%3E" />
+  <!-- Social preview -->
+  <meta property="og:title" content="P.M. Radha Krishna — Engineering Portfolio" />
+  <meta property="og:description" content="Applied AI/ML and full-stack systems, built end to end." />
+  <meta property="og:image" content="profile.jpeg" />
 
-  <!-- Fonts & CSS -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23d4ff3f'/%3E%3Ctext x='50' y='66' font-size='46' font-family='Arial' font-weight='800' fill='%2308080b' text-anchor='middle'%3ERK%3C/text%3E%3C/svg%3E" />
+
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- Fonts & icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@2.15.1/devicon.min.css">
   <link rel="stylesheet" href="style.css" />
 
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- Animation engine (vendored, no CDN dependency) -->
+  <script defer src="vendor/gsap.min.js"></script>
+  <script defer src="vendor/ScrollTrigger.min.js"></script>
+  <script defer src="vendor/lenis.min.js"></script>
 
-  <!-- Main JS -->
+  <!-- EmailJS SDK -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <script defer src="script.js"></script>
 </head>
 <body>
-  <!-- Background layers -->
-  <div class="bg-glow"></div>
-  <div class="bg-grid"></div>
-  <canvas id="particles"></canvas>
-  <div id="scroll-progress"></div>
+  <!-- Ambient layers -->
+  <div class="noise" aria-hidden="true"></div>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+  <!-- Cursor -->
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"><span class="cursor-label">View</span></div>
 
   <!-- Loader -->
-  <div id="loader">
-    <div class="loader-mark">RK<span>.</span></div>
-    <div class="loader-bar"></div>
+  <div id="loader" aria-hidden="true">
+    <div class="loader-panel loader-top"></div>
+    <div class="loader-panel loader-bottom"></div>
+    <div class="loader-inner">
+      <div class="loader-name"><span>Radha</span><span>Krishna</span></div>
+      <div class="loader-count"><span id="loaderCount">0</span>%</div>
+    </div>
   </div>
 
   <!-- Navbar -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="#home" class="logo"><span class="logo-mark">RK</span>Radha Krishna</a>
-      <ul class="nav-menu">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#achievements">Achievements</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <div class="nav-right">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <span class="icon-moon">🌙</span>
-          <span class="icon-sun">☀️</span>
-        </button>
-        <div class="hamburger" id="hamburger">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
+  <nav class="navbar" id="navbar">
+    <a href="#home" class="logo" data-cursor="link"><span class="logo-mark">RK</span><span class="logo-text">Radha Krishna</span></a>
+    <ul class="nav-menu" id="navMenu">
+      <li><a href="#about"><span class="nav-idx">01</span>About</a></li>
+      <li><a href="#work"><span class="nav-idx">02</span>Work</a></li>
+      <li><a href="#skills"><span class="nav-idx">03</span>Skills</a></li>
+      <li><a href="#achievements"><span class="nav-idx">04</span>Leadership</a></li>
+      <li><a href="#contact"><span class="nav-idx">05</span>Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="nav-pill magnetic">Resume ↓</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span></button>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section id="home" class="hero reveal-section">
-    <div class="hero-content">
-      <div class="hero-text">
-        <p class="hero-kicker"><span class="wave">👋</span> Hi, I'm</p>
-        <h1 class="hero-title">
-          <span class="gradient-text">P.M. Radha Krishna</span>
-        </h1>
-        <p class="hero-role">I'm a <span id="typed"></span><span class="cursor-blink"></span></p>
-        <p class="hero-subtitle">
-          Final-year CSE undergraduate at Amrita Vishwa Vidyapeetham, Coimbatore, building applied
-          AI/ML and full-stack systems end to end — from model training to production-hardened,
-          deployed backends.
-        </p>
-        <div class="hero-badges">
-          <span class="badge"><span class="badge-dot live"></span> Open to internships</span>
-          <span class="badge">📍 Coimbatore, India</span>
-          <span class="badge">🎓 CGPA 7.07</span>
-        </div>
-        <div class="hero-buttons">
-          <a href="#projects" class="btn btn-primary">View Projects</a>
-          <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="btn btn-secondary">Download Resume ↓</a>
-        </div>
-        <div class="hero-socials">
-          <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
-          </a>
-          <a href="mailto:pradhakrishna594@gmail.com" class="icon-btn" aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
-          </a>
-        </div>
+  <main>
+    <!-- ============ HERO ============ -->
+    <section id="home" class="hero">
+      <div class="hero-meta">
+        <span class="mono">Portfolio ©2026</span>
+        <span class="mono"><span class="live-dot"></span>Open to internships &amp; roles</span>
+        <span class="mono hide-sm">Coimbatore, IN</span>
       </div>
-      <div class="hero-visual">
-        <div class="hero-frame">
-          <div class="hero-frame-ring"></div>
-          <div class="profile-pic"></div>
-          <div class="float-card card-1">
-            <span class="fc-icon">🏆</span>
-            <div>
-              <div class="fc-num">SIH '24</div>
-              <div class="fc-label">Hackathon Participant</div>
+
+      <div class="hero-grid">
+        <div class="hero-left">
+          <p class="hero-kicker mono hero-fade">Hi, I'm —</p>
+          <h1 class="hero-title" aria-label="P.M. Radha Krishna">
+            <span class="hero-line hero-line-1" data-split>Radha</span>
+            <span class="hero-line hero-line-2"><span data-split>Krishna</span><span class="hero-dot">.</span></span>
+          </h1>
+          <p class="hero-role hero-fade">ML &amp; Full-Stack Engineer <span class="role-sep">/</span> <span class="muted">B.Tech CSE '27</span></p>
+          <p class="hero-subtitle hero-fade">
+            Final-year CSE undergraduate at Amrita Vishwa Vidyapeetham, Coimbatore, building applied
+            AI/ML and full-stack systems end to end — from model training to production-hardened,
+            deployed backends.
+          </p>
+          <div class="hero-buttons hero-fade">
+            <a href="#work" class="btn btn-primary magnetic" data-cursor="link"><span>View Projects</span><span class="btn-arrow">→</span></a>
+            <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="btn btn-ghost magnetic" data-cursor="link"><span>Download Resume</span><span class="btn-arrow">↓</span></a>
+          </div>
+          <div class="hero-socials hero-fade">
+            <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn magnetic" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+            </a>
+            <a href="https://linkedin.com/in/pasupuleti-radhakrishna-65386734b" target="_blank" rel="noopener" class="icon-btn magnetic" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><path d="M2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="mailto:pradhakrishna594@gmail.com" class="icon-btn magnetic" aria-label="Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="photo-card" id="photoCard">
+            <div class="photo-inner">
+              <img src="profile.jpeg" alt="P.M. Radha Krishna" class="photo-img" />
+              <div class="photo-shine"></div>
             </div>
           </div>
-          <div class="float-card card-2">
-            <span class="fc-icon">💻</span>
-            <div>
-              <div class="fc-num">10+</div>
-              <div class="fc-label">Projects Built</div>
+
+          <div class="spec-card">
+            <div class="spec-row"><span class="mono">Silent Voice · BiLSTM</span></div>
+            <div class="spec-stats">
+              <div><b>91.7%</b><span class="mono">test acc</span></div>
+              <div><b>4.1ms</b><span class="mono">latency</span></div>
+              <div><b>261</b><span class="mono">classes</span></div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="scroll-cue">
-      <div class="mouse"><span></span></div>
-      Scroll
-    </div>
-  </section>
 
-  <!-- About -->
-  <section id="about" class="reveal-section">
-    <div class="section-head">
-      <span class="section-kicker">Get to know me</span>
-      <h2 class="section-title">About Me</h2>
-    </div>
-    <div class="about-content">
-      <div class="about-text">
-        <p>
-          I'm a final-year CSE student at <strong>Amrita Vishwa Vidyapeetham, Coimbatore</strong>,
-          building applied AI/ML and full-stack systems end to end — from training deep-learning
-          models to hardening and deploying the backends that serve them.
-        </p>
-        <p>
-          I trained a real-time Indian Sign Language translator (BiLSTM, 91.7% accuracy) with a
-          hybrid NLP layer, led a security-hardening and NLP-feature pass on a 5-person team's
-          campus booking platform, and directed an AI-assisted canteen ordering platform with
-          live payments and order tracking. I'm currently applying ML to industrial predictive
-          maintenance as a DevOps Research Intern.
-        </p>
-        <p>
-          Outside academics, I'm active in campus events and NSS service, and I keep a balanced
-          creative side through chess, drawing and playing the guitar.
-        </p>
+      <a href="#about" class="scroll-cue mono" data-cursor="link">
+        <span class="scroll-line"></span>Scroll
+      </a>
+    </section>
 
-        <div class="edu-card">
-          <div class="edu-icon">🎓</div>
-          <div>
-            <h4>B.Tech, Computer Science &amp; Engineering</h4>
-            <p>Amrita Vishwa Vidyapeetham, Coimbatore</p>
-            <p class="edu-meta">2023 – 2027 (Expected) · CGPA 7.07</p>
-          </div>
+    <!-- ============ MARQUEE ============ -->
+    <div class="marquee-band" aria-hidden="true">
+      <div class="marquee marquee-a"><div class="marquee-track">
+        <span>PyTorch</span><i>/</i><span>MediaPipe</span><i>/</i><span>FastAPI</span><i>/</i><span>WebSockets</span><i>/</i><span>React</span><i>/</i><span>Node.js</span><i>/</i><span>MongoDB</span><i>/</i><span>Docker</span><i>/</i><span>GitHub Actions</span><i>/</i>
+      </div></div>
+    </div>
+
+    <!-- ============ ABOUT ============ -->
+    <section id="about" class="section">
+      <div class="section-head">
+        <span class="section-kicker mono">(01) — Get to know me</span>
+      </div>
+
+      <p class="statement" id="statement">
+        I build applied AI and full-stack systems end to end — from training deep-learning models
+        to <em>hardening and deploying</em> the backends that serve them.
+      </p>
+
+      <div class="about-grid">
+        <div class="about-text" data-reveal>
+          <p>
+            I'm a final-year CSE student at <strong>Amrita Vishwa Vidyapeetham, Coimbatore</strong>.
+            I trained a real-time Indian Sign Language translator (BiLSTM, 91.7% accuracy) with a
+            hybrid NLP layer, led a security-hardening and NLP-feature pass on a campus booking
+            platform, and directed an AI-assisted canteen ordering platform with live payments and
+            order tracking.
+          </p>
+          <p>
+            As a DevOps Research Intern I applied ML to industrial predictive maintenance. Outside
+            academics, I'm active in campus events and NSS service, and keep a creative side through
+            chess, drawing and the guitar.
+          </p>
+          <p class="aside mono">Off-screen — chess · drawing · guitar · NSS volunteering</p>
         </div>
 
-        <div class="hobby-row">
-          <span class="hobby-chip">♟️ Chess</span>
-          <span class="hobby-chip">🎨 Drawing</span>
-          <span class="hobby-chip">🎸 Guitar</span>
-          <span class="hobby-chip">🙌 NSS Volunteer</span>
+        <div class="about-side">
+          <div class="edu-card tilt" data-reveal>
+            <div class="edu-icon mono">EDU</div>
+            <div>
+              <h4>B.Tech, Computer Science &amp; Engineering</h4>
+              <p>Amrita Vishwa Vidyapeetham, Coimbatore</p>
+              <p class="edu-meta mono">2023 – 2027 (Expected) · CGPA 7.07</p>
+            </div>
+          </div>
+          <div class="exp-card tilt" data-reveal>
+            <div class="exp-top">
+              <span class="mono exp-date">Sep 2025 – Oct 2026</span>
+              <span class="exp-badge mono">Internship</span>
+            </div>
+            <h4>DevOps Research Intern</h4>
+            <p class="exp-org">Sybergate Solutions</p>
+            <p>ML-based anomaly prediction for industrial machines in Chlor-Alkali processes, with Dockerised dev environments and CI/CD (pytest + GitHub Actions).</p>
+          </div>
         </div>
       </div>
 
       <div class="stats">
-        <div class="stat-item">
-          <h3 data-count="7.07">0</h3>
-          <p>Current CGPA</p>
+        <div class="stat-item" data-reveal>
+          <h3><span data-count="91.7" data-decimals="1">0</span><small>%</small></h3>
+          <p>Test accuracy — ISL sign recognition (BiLSTM)</p>
         </div>
-        <div class="stat-item">
-          <h3 data-count="91.7">0</h3>
-          <p>% Sign-Language Model Accuracy</p>
+        <div class="stat-item" data-reveal>
+          <h3><span data-count="4.1" data-decimals="1">0</span><small>ms</small></h3>
+          <p>Mean inference latency per sequence</p>
         </div>
-        <div class="stat-item">
-          <h3 data-count="4">0</h3>
-          <p>Years Coding</p>
+        <div class="stat-item" data-reveal>
+          <h3><span data-count="261">0</span></h3>
+          <p>Sign classes on the full INCLUDE dataset</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Skills -->
-  <section id="skills" class="reveal-section">
-    <div class="section-head">
-      <span class="section-kicker">What I work with</span>
-      <h2 class="section-title">Skills &amp; Tools</h2>
-      <p class="section-sub">A growing toolkit across languages, web development and applied engineering concepts.</p>
-    </div>
-    <div class="skills-grid">
-      <div class="skill-category">
-        <h3>💻 Programming Languages</h3>
-        <div class="skill-row">
-          <i class="skill-icon devicon-python-plain"></i>
-          <span class="skill-name">Python</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-c-plain"></i>
-          <span class="skill-name">C</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-java-plain"></i>
-          <span class="skill-name">Java</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-cplusplus-plain"></i>
-          <span class="skill-name">C++<span class="skill-note">Beginner</span></span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-haskell-plain"></i>
-          <span class="skill-name">Haskell<span class="skill-note">Familiar</span></span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i></i><i></i><i></i></span>
+        <div class="stat-item" data-reveal>
+          <h3><span data-count="10">0</span><small>+</small></h3>
+          <p>Projects shipped across ML, web &amp; systems</p>
         </div>
       </div>
+    </section>
 
-      <div class="skill-category">
-        <h3>🌐 Web &amp; Frontend</h3>
-        <div class="skill-row">
-          <i class="skill-icon devicon-html5-plain"></i>
-          <span class="skill-name">HTML</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+    <!-- ============ WORK (horizontal) ============ -->
+    <section id="work" class="work">
+      <div class="work-pin">
+        <div class="work-head">
+          <span class="section-kicker mono">(02) — Things I've built</span>
+          <h2 class="section-title big" data-split-title>Selected Work</h2>
+          <div class="work-progress"><span id="workProgress"></span></div>
         </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-css3-plain"></i>
-          <span class="skill-name">CSS</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-javascript-plain"></i>
-          <span class="skill-name">JavaScript</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-react-original"></i>
-          <span class="skill-name">React<span class="skill-note">Basic</span></span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i></i><i></i><i></i></span>
+
+        <div class="work-track" id="workTrack">
+          <article class="work-card" data-cursor="view" tabindex="0" aria-label="Open project details">
+            <div class="work-visual v1">
+              <span class="work-num">01</span>
+              <span class="work-chip mono">Featured · ML</span>
+              <ul class="work-spec"><li><span class="mono">Model</span><span>BiLSTM, 60-frame landmark sequences</span></li><li><span class="mono">Data</span><span>INCLUDE · 261 classes · MediaPipe</span></li><li><span class="mono">Serving</span><span>FastAPI + WebSocket stream</span></li><li><span class="mono">Result</span><span>91.7% test acc · 4.1 ms</span></li></ul>
+            </div>
+            <div class="work-body">
+              <h3>Silent Voice — ISL ↔ English Translator</h3>
+              <p>Real-time Indian Sign Language translator (Team of 2). Trained a BiLSTM classifier on the full INCLUDE dataset (261 classes, MediaPipe landmarks) to 91.7% test accuracy, streamed live recognition over WebSockets, and built a hybrid NLP layer that turns recognized signs into fluent English sentences.</p>
+              <div class="project-tags"><span>PyTorch</span><span>FastAPI</span><span>WebSockets</span><span>React</span><span>Docker</span></div>
+              <div class="work-foot">
+                <span class="project-status mono">Shipped</span>
+                <a href="https://github.com/Radha-Krishna-19/Silent-Voice" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card" data-cursor="view" tabindex="0" aria-label="Open project details">
+            <div class="work-visual v2">
+              <span class="work-num">02</span>
+              <span class="work-chip mono">Featured · Web</span>
+              <ul class="work-spec"><li><span class="mono">Role</span><span>Backend lead · team of 5</span></li><li><span class="mono">Core</span><span>Booking + self-healing reallocation</span></li><li><span class="mono">Security</span><span>Closed unauthenticated wipe endpoint</span></li><li><span class="mono">Extra</span><span>Hybrid LLM / rule NLP assistant</span></li></ul>
+            </div>
+            <div class="work-body">
+              <h3>Campus Resource Manager</h3>
+              <p>AI-driven hall booking &amp; reallocation platform (Team of 5). As backend lead, owned the booking/room/forecasting services and a self-healing reallocation engine. Independently ran a security audit, fixed an unauthenticated inventory-wipe endpoint, and built a hybrid LLM/rule-based NLP booking assistant.</p>
+              <div class="project-tags"><span>React</span><span>Node.js</span><span>MongoDB</span><span>Docker</span></div>
+              <div class="work-foot">
+                <span class="project-status mono">Shipped</span>
+                <a href="https://github.com/Radha-Krishna-19/campus-resource-management" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card" data-cursor="view" tabindex="0" aria-label="Open project details">
+            <div class="work-visual v3">
+              <span class="work-num">03</span>
+              <span class="work-chip mono">Featured · Web</span>
+              <ul class="work-spec"><li><span class="mono">Scope</span><span>3 role-based portals</span></li><li><span class="mono">Auth</span><span>JWT · role-gated routes</span></li><li><span class="mono">Realtime</span><span>Socket.IO order tracking</span></li><li><span class="mono">Payments</span><span>Razorpay checkout</span></li></ul>
+            </div>
+            <div class="work-body">
+              <h3>Campus Bites</h3>
+              <p>Canteen ordering platform with an AI meal assistant (Team of 3). Directed an AI-assisted build of 3 role-based portals — JWT auth, live inventory, Razorpay checkout, and Socket.IO order tracking — plus a GPT-4o meal assistant for symptom-based suggestions and diet plans.</p>
+              <div class="project-tags"><span>React</span><span>FastAPI</span><span>MongoDB</span><span>Socket.IO</span></div>
+              <div class="work-foot">
+                <span class="project-status mono">Shipped</span>
+                <a href="https://github.com/Radha-Krishna-19/Campus-Bites" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work-card" data-cursor="view" tabindex="0" aria-label="Open project details">
+            <div class="work-visual v4">
+              <span class="work-num">04</span>
+              <span class="work-chip mono">Industry · ML</span>
+              <ul class="work-spec"><li><span class="mono">Domain</span><span>Chlor-Alkali process plants</span></li><li><span class="mono">Task</span><span>Anomaly prediction for machines</span></li><li><span class="mono">Infra</span><span>Docker DevContainers</span></li><li><span class="mono">CI</span><span>pytest + GitHub Actions</span></li></ul>
+            </div>
+            <div class="work-body">
+              <h3>Predictive Maintenance</h3>
+              <p>ML-based anomaly prediction model for industrial machines at Sybergate Solutions, focused on Chlor-Alkali processes, with reproducible Docker/CI workflows.</p>
+              <div class="project-tags"><span>Machine Learning</span><span>Docker</span><span>CI/CD</span><span>Internship</span></div>
+              <div class="work-foot">
+                <span class="project-status mono">Internship · Sep 2025 – Oct 2026</span>
+              </div>
+            </div>
+          </article>
+
+          <a class="work-card work-end" href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" data-cursor="link">
+            <span class="mono">More on GitHub</span>
+            <span class="work-end-big">See all<br>repos ↗</span>
+          </a>
         </div>
       </div>
+    </section>
 
-      <div class="skill-category">
-        <h3>🧠 Tools &amp; Concepts</h3>
-        <div class="skill-row">
-          <span class="skill-icon">🧩</span>
-          <span class="skill-name">Data Structures &amp; Algorithms</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+    <!-- ============ MORE BUILDS ============ -->
+    <section id="projects" class="section more">
+      <div class="section-head row">
+        <div>
+          <span class="section-kicker mono">Weekend builds &amp; experiments</span>
+          <h2 class="section-title" data-split-title>More Builds</h2>
         </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-git-plain"></i>
-          <span class="skill-name">Git &amp; GitHub</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <span class="skill-icon">👁️</span>
-          <span class="skill-name">Computer Vision</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <span class="skill-icon">🤖</span>
-          <span class="skill-name">AI &amp; Machine Learning</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i></span>
-        </div>
-      </div>
-
-      <div class="skill-category">
-        <h3>🛠️ Backend &amp; Deployment</h3>
-        <div class="skill-row">
-          <i class="skill-icon devicon-nodejs-plain"></i>
-          <span class="skill-name">Node.js &amp; Express</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <span class="skill-icon">⚡</span>
-          <span class="skill-name">FastAPI<span class="skill-note">Python</span></span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-mongodb-plain"></i>
-          <span class="skill-name">MongoDB &amp; SQL</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-docker-plain"></i>
-          <span class="skill-name">Docker &amp; CI/CD</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
-        </div>
-        <div class="skill-row">
-          <i class="skill-icon devicon-pytorch-original"></i>
-          <span class="skill-name">PyTorch</span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i></span>
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="software">Software</button>
+          <button class="filter-btn" data-filter="ml">ML &amp; CV</button>
+          <button class="filter-btn" data-filter="embedded">Embedded</button>
+          <button class="filter-btn" data-filter="web">Web</button>
         </div>
       </div>
 
-      <div class="skill-category">
-        <h3>☁️ Cloud &amp; Credentials</h3>
-        <div class="skill-row">
-          <i class="skill-icon devicon-amazonwebservices-plain-wordmark" style="color:#f5b84e"></i>
-          <span class="skill-name">AWS Cloud Practitioner<span class="skill-note">Certified</span></span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i></span>
+      <div class="mini-grid">
+        <div class="mini-card tilt" data-category="software" data-reveal>
+          <div class="mini-top"><span class="mono mini-num">01</span><span class="mono mini-stack">Python · CLI</span></div>
+          <h4>Attendance Manager (CLI)</h4>
+          <p>Python CLI tool that automates ID-card attendance marking for classes and events.</p>
         </div>
-        <div class="skill-row">
-          <span class="skill-icon">📜</span>
-          <span class="skill-name">CIR, Amrita<span class="skill-note">Certification</span></span>
-          <span class="skill-level"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i></span>
+        <div class="mini-card tilt" data-category="software" data-reveal>
+          <div class="mini-top"><span class="mono mini-num">02</span><span class="mono mini-stack">Python · Minimax</span></div>
+          <h4>Stockfish-style Chess Engine</h4>
+          <p>Chess engine in Python using minimax search with alpha-beta pruning to cut the explored game tree.</p>
+        </div>
+        <div class="mini-card tilt" data-category="web" data-reveal>
+          <div class="mini-top"><span class="mono mini-num">03</span><span class="mono mini-stack">Python · Analysis</span></div>
+          <h4>Spotube Case Study</h4>
+          <p>Reverse-engineered case study on how Python functions power the Spotube music app.</p>
+        </div>
+        <div class="mini-card tilt" data-category="web" data-reveal>
+          <div class="mini-top"><span class="mono mini-num">04</span><span class="mono mini-stack">JavaScript · UI</span></div>
+          <h4>Local Chess UI</h4>
+          <p>A local chess interface linked to and playable against the original chess engine website.</p>
+        </div>
+        <div class="mini-card tilt" data-category="embedded" data-reveal>
+          <div class="mini-top"><span class="mono mini-num">05</span><span class="mono mini-stack">TinkerCAD · Sensors</span></div>
+          <h4>Plant Monitoring System</h4>
+          <p>Sensor-driven plant health monitoring circuit prototyped and simulated in TinkerCAD.</p>
+        </div>
+        <div class="mini-card tilt" data-category="software" data-reveal>
+          <div class="mini-top"><span class="mono mini-num">06</span><span class="mono mini-stack">Python · Ropes / Piece table</span></div>
+          <h4>Python Notepad</h4>
+          <p>A from-scratch notepad app in Python built using ropes, piece tables and stacks for efficient text editing.</p>
+        </div>
+        <div class="mini-card tilt" data-category="ml" data-reveal>
+          <div class="mini-top"><span class="mono mini-num">07</span><span class="mono mini-stack">YOLOv8 · OCR</span></div>
+          <h4>YOLO Handwritten Math → LaTeX</h4>
+          <p>Trained a YOLOv8 detector to recognise handwritten math symbols and convert them into LaTeX.</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Projects -->
-  <section id="projects" class="reveal-section">
-    <div class="section-head">
-      <span class="section-kicker">Things I've built</span>
-      <h2 class="section-title">Technical Projects</h2>
-      <p class="section-sub">A mix of software, machine learning and systems experiments — from full engines to weekend builds.</p>
-    </div>
+    <!-- ============ SKILLS ============ -->
+    <section id="skills" class="section">
+      <div class="section-head">
+        <span class="section-kicker mono">(03) — What I work with</span>
+        <h2 class="section-title" data-split-title>Skills &amp; Tools</h2>
+      </div>
 
-    <div class="filter-bar">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="software">Software</button>
-      <button class="filter-btn" data-filter="ml">ML &amp; CV</button>
-      <button class="filter-btn" data-filter="embedded">Embedded</button>
-      <button class="filter-btn" data-filter="web">Web</button>
-    </div>
-
-    <div class="projects-grid">
-      <div class="project-card reveal-item" data-category="ml">
-        <div class="project-top grad-1">
-          <span class="project-glyph">🤟</span>
-          <span class="project-featured-badge">Featured</span>
+      <div class="skills-grid">
+        <div class="skill-category" data-reveal>
+          <h3><span class="sc-num mono">A</span>Languages</h3>
+          <div class="skill-tags"><span><i class="devicon-python-plain"></i>Python</span><span><i class="devicon-c-plain"></i>C</span><span><i class="devicon-javascript-plain"></i>JavaScript</span><span>SQL</span><span><i class="devicon-cplusplus-plain"></i>C++ <em>learning</em></span><span><i class="devicon-java-plain"></i>Java <em>coursework</em></span></div>
         </div>
-        <div class="project-content">
-          <h3>Silent Voice — ISL ↔ English Translator</h3>
-          <p>Real-time Indian Sign Language translator (Team of 2). Trained a BiLSTM classifier on the full INCLUDE dataset (261 classes, MediaPipe landmarks) to 91.7% test accuracy, streamed live recognition over WebSockets, and built a hybrid NLP layer that turns recognized signs into fluent English sentences.</p>
-          <div class="project-tags"><span>PyTorch</span><span>FastAPI</span><span>WebSockets</span><span>React</span><span>Docker</span></div>
-          <div class="project-footer">
-            <span class="project-status">✅ Completed</span>
-            <a href="https://github.com/Radha-Krishna-19/Silent-Voice" target="_blank" rel="noopener" class="icon-btn" style="width:36px;height:36px" aria-label="View on GitHub">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+        <div class="skill-category" data-reveal>
+          <h3><span class="sc-num mono">B</span>ML &amp; Computer Vision</h3>
+          <div class="skill-tags"><span><i class="devicon-pytorch-original"></i>PyTorch</span><span>BiLSTM / CNN</span><span>MediaPipe</span><span><i class="devicon-opencv-plain"></i>OpenCV</span><span>YOLOv8</span><span>Prophet</span></div>
+        </div>
+        <div class="skill-category" data-reveal>
+          <h3><span class="sc-num mono">C</span>Backend &amp; Web</h3>
+          <div class="skill-tags"><span><i class="devicon-fastapi-plain"></i>FastAPI</span><span><i class="devicon-nodejs-plain"></i>Node.js / Express</span><span><i class="devicon-react-original"></i>React</span><span>WebSockets / Socket.IO</span><span>REST APIs</span><span>JWT auth</span></div>
+        </div>
+        <div class="skill-category" data-reveal>
+          <h3><span class="sc-num mono">D</span>Data, Cloud &amp; DevOps</h3>
+          <div class="skill-tags"><span><i class="devicon-mongodb-plain"></i>MongoDB</span><span><i class="devicon-mysql-plain"></i>MySQL</span><span><i class="devicon-docker-plain"></i>Docker</span><span><i class="devicon-githubactions-plain"></i>GitHub Actions</span><span><i class="devicon-linux-plain"></i>Linux / Bash</span><span><i class="devicon-amazonwebservices-plain-wordmark"></i>AWS <em>course</em></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ACHIEVEMENTS ============ -->
+    <section id="achievements" class="section">
+      <div class="section-head">
+        <span class="section-kicker mono">(04) — Beyond the code</span>
+        <h2 class="section-title" data-split-title>Hackathons &amp; Leadership</h2>
+      </div>
+
+      <div class="timeline" id="timeline">
+        <div class="timeline-line"><span id="timelineFill"></span></div>
+
+        <div class="timeline-item" data-reveal>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-tag mono">2024 · Hackathon</span>
+            <h4>Smart India Hackathon (SIH) 2024</h4>
+            <p>Built a sun-tracking solar panel system using MATLAB as part of a national-level hackathon team.</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-reveal>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-tag mono">2024 · Challenge</span>
+            <h4>Clear Skies Challenge 2024</h4>
+            <p>Designed a pollution-minimised path finder using Dijkstra's algorithm alongside cost-effective Pavegen-style energy tiles.</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-reveal>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-tag mono">Aug 2024 – Mar 2025 · Course</span>
+            <h4>AWS Cloud Engineering — Course Completion</h4>
+            <p>Completed via CIR, Amrita Vishwa Vidyapeetham — foundations of AWS cloud concepts and services.</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-reveal>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-tag mono">Leadership · NSS</span>
+            <h4>NSS Lead — Swachhata Hi Seva</h4>
+            <p>Led volunteer teams for railway station and government school painting projects under the National Service Scheme.</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-reveal>
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <span class="timeline-tag mono">2024 – 2025 · Campus</span>
+            <h4>Gokulashtami — Decoration Coordinator</h4>
+            <p>Team member in 2024; one of the decoration coordinators for the campus celebration in 2025.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="section contact">
+
+      <div class="contact-grid">
+        <div class="contact-info" data-reveal>
+          <span class="section-kicker mono">(05) — Get in touch</span>
+          <h2 class="contact-title">Hiring for ML or backend work?<br><span class="accent">Let's talk.</span></h2>
+          <p>Open to internships, collaborations, and project discussions across software, ML and systems — I usually reply within a day or two.</p>
+
+          <div class="contact-lines">
+            <a class="contact-line" href="mailto:pradhakrishna594@gmail.com" data-cursor="link">
+              <small class="mono">Email</small><span>pradhakrishna594@gmail.com</span><b>↗</b>
             </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card reveal-item" data-category="web">
-        <div class="project-top grad-2">
-          <span class="project-glyph">🏫</span>
-          <span class="project-featured-badge">Featured</span>
-        </div>
-        <div class="project-content">
-          <h3>Campus Resource Manager</h3>
-          <p>AI-driven hall booking &amp; reallocation platform (Team of 5). As backend lead, owned the booking/room/forecasting services and a self-healing reallocation engine. Independently ran a security audit, fixed an unauthenticated inventory-wipe endpoint, and built a hybrid LLM/rule-based NLP booking assistant.</p>
-          <div class="project-tags"><span>React</span><span>Node.js</span><span>MongoDB</span><span>Docker</span></div>
-          <div class="project-footer">
-            <span class="project-status">✅ Completed</span>
-            <a href="https://github.com/Radha-Krishna-19/campus-resource-management" target="_blank" rel="noopener" class="icon-btn" style="width:36px;height:36px" aria-label="View on GitHub">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+            <a class="contact-line" href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" data-cursor="link">
+              <small class="mono">GitHub</small><span>Radha-Krishna-19</span><b>↗</b>
             </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card reveal-item" data-category="web">
-        <div class="project-top grad-3">
-          <span class="project-glyph">🍽️</span>
-          <span class="project-featured-badge">Featured</span>
-        </div>
-        <div class="project-content">
-          <h3>Campus Bites</h3>
-          <p>Canteen ordering platform with an AI meal assistant (Team of 3). Directed an AI-assisted build of 3 role-based portals — JWT auth, live inventory, Razorpay checkout, and Socket.IO order tracking — plus a GPT-4o meal assistant for symptom-based suggestions and diet plans.</p>
-          <div class="project-tags"><span>React</span><span>FastAPI</span><span>MongoDB</span><span>Socket.IO</span></div>
-          <div class="project-footer">
-            <span class="project-status">✅ Completed</span>
-            <a href="https://github.com/Radha-Krishna-19/Campus-Bites" target="_blank" rel="noopener" class="icon-btn" style="width:36px;height:36px" aria-label="View on GitHub">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+            <a class="contact-line" href="https://linkedin.com/in/pasupuleti-radhakrishna-65386734b" target="_blank" rel="noopener" data-cursor="link">
+              <small class="mono">LinkedIn</small><span>Pasupuleti Radha Krishna</span><b>↗</b>
             </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card reveal-item" data-category="ml">
-        <div class="project-top grad-4">
-          <span class="project-glyph">⚙️</span>
-          <span class="project-featured-badge">Featured</span>
-        </div>
-        <div class="project-content">
-          <h3>Predictive Maintenance</h3>
-          <p>Ongoing ML-based anomaly prediction model for industrial machines at Sybergate Solutions, focused on Chlor-Alkali processes, with reproducible Docker/CI workflows.</p>
-          <div class="project-tags"><span>Machine Learning</span><span>Industry</span><span>Internship</span></div>
-          <div class="project-footer">
-            <span class="project-status">🟡 Ongoing · Internship</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h3 class="more-heading">More Builds</h3>
-    <div class="mini-grid">
-      <div class="mini-card reveal-item" data-category="software">
-        <span class="mini-icon">📋</span>
-        <h4>Attendance Manager (CLI)</h4>
-        <p>Python CLI tool that automates ID-card attendance marking for classes and events.</p>
-      </div>
-      <div class="mini-card reveal-item" data-category="software">
-        <span class="mini-icon">♟️</span>
-        <h4>Stockfish-style Chess Engine</h4>
-        <p>Chess engine in Python using minimax search with alpha-beta pruning to cut the explored game tree.</p>
-      </div>
-      <div class="mini-card reveal-item" data-category="web">
-        <span class="mini-icon">🎧</span>
-        <h4>Spotube Case Study</h4>
-        <p>Reverse-engineered case study on how Python functions power the Spotube music app.</p>
-      </div>
-      <div class="mini-card reveal-item" data-category="web">
-        <span class="mini-icon">♟️</span>
-        <h4>Local Chess UI</h4>
-        <p>A local chess interface linked to and playable against the original chess engine website.</p>
-      </div>
-      <div class="mini-card reveal-item" data-category="embedded">
-        <span class="mini-icon">🌱</span>
-        <h4>Plant Monitoring System</h4>
-        <p>Sensor-driven plant health monitoring circuit prototyped and simulated in TinkerCAD.</p>
-      </div>
-      <div class="mini-card reveal-item" data-category="software">
-        <span class="mini-icon">📝</span>
-        <h4>Python Notepad</h4>
-        <p>A from-scratch notepad app in Python built using ropes, piece tables and stacks for efficient text editing.</p>
-      </div>
-      <div class="mini-card reveal-item" data-category="ml">
-        <span class="mini-icon">🔎</span>
-        <h4>YOLO Handwritten Math → LaTeX</h4>
-        <p>Trained a YOLOv8 detector to recognise handwritten math symbols and convert them into LaTeX.</p>
-      </div>
-    </div>
-
-    <div class="projects-cta">
-      <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="btn btn-secondary">See more on GitHub →</a>
-    </div>
-  </section>
-
-  <!-- GitHub Activity -->
-  <section id="github" class="reveal-section">
-    <div class="section-head">
-      <span class="section-kicker">Live from GitHub</span>
-      <h2 class="section-title">GitHub Activity</h2>
-    </div>
-    <div class="github-section">
-      <div class="github-cards" id="githubCards">
-        <img src="https://github-readme-stats.vercel.app/api?username=Radha-Krishna-19&show_icons=true&hide_title=true&count_private=true&theme=dark&bg_color=00000000&border_color=5b8cff&title_color=5b8cff&icon_color=2dd4c8&text_color=8c94a8" alt="Radha Krishna's GitHub stats" onerror="this.closest('.github-cards').classList.add('fallback'); this.remove();" />
-        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Radha-Krishna-19&layout=compact&hide_title=true&theme=dark&bg_color=00000000&border_color=5b8cff&title_color=5b8cff&text_color=8c94a8" alt="Most used languages" onerror="this.remove();" />
-      </div>
-      <p class="github-fallback-note" id="githubFallbackNote">Live stats card is served by a free third-party API and may occasionally be unavailable — head to the profile directly if it doesn't load.</p>
-      <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="btn btn-primary">Visit GitHub Profile</a>
-    </div>
-  </section>
-
-  <!-- Achievements -->
-  <section id="achievements" class="reveal-section">
-    <div class="section-head">
-      <span class="section-kicker">Milestones</span>
-      <h2 class="section-title">Achievements &amp; Leadership</h2>
-    </div>
-
-    <div class="timeline">
-      <div class="timeline-item reveal-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <span class="timeline-tag">2024 · Hackathon</span>
-          <h4>Smart India Hackathon (SIH) 2024</h4>
-          <p>Built a sun-tracking solar panel system using MATLAB as part of a national-level hackathon team.</p>
-        </div>
-      </div>
-      <div class="timeline-item reveal-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <span class="timeline-tag">2024 · Challenge</span>
-          <h4>Clear Skies Challenge 2024</h4>
-          <p>Designed a pollution-minimised path finder using Dijkstra's algorithm alongside cost-effective Pavegen-style energy tiles.</p>
-        </div>
-      </div>
-      <div class="timeline-item reveal-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <span class="timeline-tag">Certification</span>
-          <h4>AWS Cloud Practitioner</h4>
-          <p>Earned via CIR, Amrita — foundational certification in AWS cloud concepts and services.</p>
-        </div>
-      </div>
-      <div class="timeline-item reveal-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <span class="timeline-tag">Leadership · NSS</span>
-          <h4>NSS Lead — Swachhata Hi Seva</h4>
-          <p>Led volunteer teams for railway station and government school painting projects under the National Service Scheme.</p>
-        </div>
-      </div>
-      <div class="timeline-item reveal-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <span class="timeline-tag">2025 · Campus Life</span>
-          <h4>Gokulashtami Decoration Coordinator</h4>
-          <p>Coordinated campus decorations for the Gokulashtami festival celebration.</p>
-        </div>
-      </div>
-      <div class="timeline-item reveal-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <span class="timeline-tag">2024 · Campus Life</span>
-          <h4>Gokulashtami Celebrations — Team Member</h4>
-          <p>Took part in organising campus Gokulashtami festival celebrations.</p>
-        </div>
-      </div>
-      <div class="timeline-item reveal-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <span class="timeline-tag">Competitions</span>
-          <h4>College Chess &amp; Drawing Competitions</h4>
-          <p>Regular participant in campus chess and drawing competitions, balancing strategic and artistic thinking.</p>
-        </div>
-      </div>
-    </div>
-
-    <p class="career-quote">
-      "Currently exploring multiple tech fields and building a broad base of skills before
-      specialising — keeping options open across software, ML and systems work."
-    </p>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="reveal-section">
-    <div class="section-head">
-      <span class="section-kicker">Let's talk</span>
-      <h2 class="section-title">Get In Touch</h2>
-      <p class="section-sub">Open to internships, collaborations, and project discussions across software, ML and systems.</p>
-    </div>
-
-    <div class="contact-grid">
-      <div class="contact-info">
-        <h3>Contact Details</h3>
-        <p>Feel free to reach out for opportunities, collaborations, or just to talk tech — I usually reply within a day or two.</p>
-
-        <div class="contact-line">
-          <span class="ci">✉️</span>
-          <div>
-            <small>Email</small>
-            <a href="mailto:pradhakrishna594@gmail.com">pradhakrishna594@gmail.com</a>
-          </div>
-        </div>
-        <div class="contact-line">
-          <span class="ci">🐙</span>
-          <div>
-            <small>GitHub</small>
-            <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener">Radha-Krishna-19</a>
-          </div>
-        </div>
-        <div class="contact-line">
-          <span class="ci">📍</span>
-          <div>
-            <small>Location</small>
-            <span class="ct">Coimbatore, Tamil Nadu, India</span>
+            <div class="contact-line static">
+              <small class="mono">Location</small><span>Coimbatore, Tamil Nadu, India</span>
+            </div>
           </div>
         </div>
 
-        <div class="contact-resume">
-          <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="btn btn-primary">📄 Download Resume</a>
-        </div>
+        <form id="contact-form" class="contact-form" data-reveal>
+          <label class="field"><input type="text" name="title" placeholder=" " required /><span>Subject / Title *</span></label>
+          <div class="form-row">
+            <label class="field"><input type="text" name="name" placeholder=" " required /><span>Your Name *</span></label>
+            <label class="field"><input type="email" name="email" placeholder=" " required /><span>Your Email *</span></label>
+          </div>
+          <label class="field"><textarea name="message" rows="5" placeholder=" " required></textarea><span>Your Message *</span></label>
+          <button type="submit" class="btn btn-primary magnetic full" data-cursor="link"><span>Send Message</span><span class="btn-arrow">→</span></button>
+          <div id="successMsg" class="success-message">Message sent — I'll get back to you soon.</div>
+        </form>
       </div>
+    </section>
+  </main>
 
-      <form id="contact-form" class="contact-form">
-        <input type="text" name="title" placeholder="Subject / Title *" required />
-        <div class="form-row">
-          <input type="text" name="name" placeholder="Your Name *" required />
-          <input type="email" name="email" placeholder="Your Email *" required />
-        </div>
-        <textarea name="message" rows="5" placeholder="Your Message *" required></textarea>
-        <button type="submit" class="btn btn-primary">Send Message</button>
-        <div id="successMsg" class="success-message">
-          ✅ Message sent successfully! Will get back to you soon.
-        </div>
-      </form>
-    </div>
-  </section>
+
+  <!-- Project detail panel (opens from the clicked card) -->
+  <div class="detail-scrim" id="detailScrim" hidden></div>
+  <div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle" hidden>
+    <button class="detail-close" id="detailClose" aria-label="Close project details">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="detail-content" id="detailContent"></div>
+  </div>
 
   <!-- Footer -->
   <footer class="site-footer">
+    <div class="footer-big" aria-hidden="true">RADHA KRISHNA</div>
     <div class="footer-inner">
-      <p>© <span id="year"></span> P.M. Radha Krishna · Built with HTML, CSS &amp; JavaScript</p>
+      <p class="mono">© <span id="year"></span> P.M. Radha Krishna · Hand-built · HTML, CSS, GSAP</p>
       <div class="footer-socials">
         <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
