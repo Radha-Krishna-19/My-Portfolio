@@ -830,3 +830,23 @@ main { position: relative; z-index: 1; }
 }
 @media (prefers-reduced-motion: reduce) { .work-card { -webkit-mask-image: none; mask-image: none; } }
 .no-gsap .work-card { -webkit-mask-image: none; mask-image: none; }
+
+/* v13 — Professional experience + live-site links */
+.experience { padding-bottom: clamp(40px, 6vw, 80px); }
+.xp {
+  display: grid; grid-template-columns: 200px 1fr; gap: 32px;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 34px 36px;
+}
+.xp-side { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.xp-date { color: var(--muted); }
+.xp-main h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.15; }
+.xp-at { color: var(--muted); font-weight: 600; }
+.xp-project { color: var(--accent); font-weight: 600; font-size: 15px; margin: 8px 0 18px; }
+.xp-points { list-style: none; display: grid; gap: 10px; margin-bottom: 22px; }
+.xp-points li { position: relative; padding-left: 20px; color: #b9b9c2; font-size: 15px; line-height: 1.6; }
+.xp-points li::before { content: ''; position: absolute; left: 0; top: .7em; width: 8px; height: 1.5px; background: var(--accent); }
+@media (max-width: 899px) { .xp { grid-template-columns: 1fr; gap: 14px; padding: 24px 22px; } .xp-side { flex-direction: row; align-items: center; } }
+
+.work-links { display: inline-flex; gap: 18px; align-items: center; }
+.work-link.live { color: var(--text); }
+.work-link.live:hover { color: var(--accent); }
