@@ -742,3 +742,9 @@ main { position: relative; z-index: 1; }
 }
 .hl.on { color: var(--accent-ink); }
 .hl.on::before { transform: scaleX(1); }
+
+/* v8 — show the whole photo: square frame matching the source, no crop */
+.photo-inner { aspect-ratio: 1 / 1; }
+.photo-img { height: 100%; object-position: 50% 50%; }
+.hero-right { width: min(540px, 100%); }
+@media (max-width: 900px) { .hero-right { width: min(380px, 90vw); } }

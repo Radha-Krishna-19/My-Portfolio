@@ -233,11 +233,9 @@ function initHeroScroll() {
         .to('.hero-line-2', { xPercent: 18, ease: 'none' }, 0)
         .to(['.hero-fade', '.hero-kicker', '.hero-meta'], { opacity: 0, y: -24, ease: 'none' }, 0)
         .to('.hero-right', { scale: 1.12, x: '-6vw', ease: 'none' }, 0)
-        .to('.photo-img', { scale: 1.08, ease: 'none' }, 0)
         .to('.hero-title', { opacity: 0.12, ease: 'none' }, 0.35);
     },
     '(max-width: 899px)': () => {
-      gsap.to('.photo-img', { yPercent: -10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     },
   });
 
