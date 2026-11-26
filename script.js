@@ -242,7 +242,6 @@ function initHeroScroll() {
   gsap.to('.hero-line-2', { xPercent: 6, ease: 'none', scrollTrigger: st });
   gsap.to('.hero-left', { opacity: 0, y: -40, ease: 'none', scrollTrigger: { ...st, end: '80% top' } });
   gsap.to('.hero-right', { y: -60, ease: 'none', scrollTrigger: st });
-  initSpotlight();
   return;
 
   const card = $('#photoCard');
@@ -882,6 +881,51 @@ function initHighlights() {
   });
 }
 
+
+// ===============================
+// THEME — dark / light, switched with an ink splash that spreads from the button
+// ===============================
+function initTheme() {
+  const btn = $('#themeToggle');
+  if (!btn) return;
+  const root = document.documentElement;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const label = () => {
+    const light = root.dataset.theme === 'light';
+    btn.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+    if (meta) meta.setAttribute('content', light ? '#f1eee6' : '#08080b');
+  };
+  const apply = (light) => {
+    if (light) root.dataset.theme = 'light'; else delete root.dataset.theme;
+    try { localStorage.setItem('rk-theme', light ? 'light' : 'dark'); } catch (e) { /* storage unavailable */ }
+    label();
+  };
+  label();
+  btn.addEventListener('click', (e) => {
+    const toLight = root.dataset.theme !== 'light';
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX || r.left + r.width / 2, y = e.clientY || r.top + r.height / 2;
+    root.style.setProperty('--vx', x + 'px');
+    root.style.setProperty('--vy', y + 'px');
+    if (!document.startViewTransition || REDUCED) { apply(toLight); return; }
+    document.startViewTransition(() => apply(toLight));
+  });
+}
+
+// ===============================
+// PAGE LIGHT — a soft light behind the content that follows the cursor everywhere
+// ===============================
+function initPageLight() {
+  const layer = $('.page-light');
+  if (!layer || !FINE_POINTER || REDUCED) return;
+  const pos = { x: innerWidth * 0.7, y: innerHeight * 0.3 };
+  const setX = HAS_GSAP ? gsap.quickTo(pos, 'x', { duration: 0.8, ease: 'power3' }) : (v) => { pos.x = v; };
+  const setY = HAS_GSAP ? gsap.quickTo(pos, 'y', { duration: 0.8, ease: 'power3' }) : (v) => { pos.y = v; };
+  addEventListener('mousemove', (e) => { setX(e.clientX); setY(e.clientY); }, { passive: true });
+  const paint = () => { layer.style.setProperty('--lx', pos.x + 'px'); layer.style.setProperty('--ly', pos.y + 'px'); };
+  if (HAS_GSAP) gsap.ticker.add(paint); else addEventListener('mousemove', paint, { passive: true });
+}
+
 // ===============================
 // 19. CONTACT FORM (EMAILJS)
 // ===============================
@@ -925,6 +969,11 @@ function initContactForm() {
 // 20. INIT
 // ===============================
 function init() {
+  // Always start at the top: the intro plays there, and restoring an old scroll
+  // position mid-setup confuses the scroll engine.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (!location.hash) window.scrollTo(0, 0);
+  if (HAS_GSAP) ScrollTrigger.clearScrollMemory && ScrollTrigger.clearScrollMemory('manual');
   const yearEl = $('#year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -946,6 +995,8 @@ function init() {
   initFooter();
   initMagnetic();
   initProjectFilter();
+  initTheme();
+  initPageLight();
   initContactForm();
 
   const start = () => runIntro();
