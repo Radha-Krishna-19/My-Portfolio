@@ -401,23 +401,92 @@ function initWork() {
   const bar = $('#workProgress');
   if (!track || !pin) return;
 
-  // Scroll-scrubbed: cards build left->right as they enter,
-  // dissolve into thin vertical slats as they leave the top, and reverse on the way back up.
-  $$('.work-card', track).forEach((card) => {
-    gsap.set(card, { '--slat': '48px' });
-    gsap.fromTo(card,
-      { clipPath: 'inset(0% 100% 0% 0% round 28px)' },
-      { clipPath: 'inset(0% 0% 0% 0% round 28px)', ease: 'none',
-        scrollTrigger: { trigger: card, start: 'top 95%', end: 'top 55%', scrub: 0.4 } });
-    gsap.fromTo(card.querySelectorAll('.work-spec li, .work-body > *'),
-      { x: -30, opacity: 0 },
-      { x: 0, opacity: 1, ease: 'none', stagger: 0.04,
-        scrollTrigger: { trigger: card, start: 'top 85%', end: 'top 50%', scrub: 0.4 } });
-    gsap.fromTo(card,
-      { '--slat': '48px', y: 0, opacity: 1 },
-      { '--slat': '0px', y: -40, opacity: 0.2, ease: 'power1.in',
-        scrollTrigger: { trigger: card, start: 'top 22%', end: 'bottom 5%', scrub: 0.4 } });
+  initDust($$('.work-card', track));
+}
+
+// ===============================
+// 11b. DUST — cards form out of particles left->right as they enter, and crumble
+// into dust that blows away as they leave the top. Everything is a pure function
+// of scroll progress, so scrolling back up replays it exactly in reverse.
+// ===============================
+function initDust(cards) {
+  if (!cards.length) return;
+  const fx = document.createElement('canvas');
+  fx.className = 'dust-canvas';
+  fx.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(fx);
+  const ctx = fx.getContext('2d');
+  const size = () => { fx.width = innerWidth; fx.height = innerHeight; };
+  size(); addEventListener('resize', size);
+
+  const rand = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+  const COLORS = ['#3a3a44', '#55555f', '#8d8d97', '#e9e7df', '#c6ef4e'];
+
+  const states = cards.map((card, ci) => {
+    const r = card.getBoundingClientRect();
+    const GW = 72, GH = Math.max(10, Math.min(60, Math.round(GW * r.height / r.width)));
+    const cells = [];
+    for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) {
+      const k = ci * 10000 + y * GW + x;
+      cells.push({ x, y, th: (x / GW) * 0.78 + rand(k) * 0.22, r1: rand(k + 1), r2: rand(k + 2),
+                   c: COLORS[rand(k + 3) < 0.06 ? 4 : Math.floor(rand(k + 4) * 4)] });
+    }
+    const mask = document.createElement('canvas'); mask.width = GW; mask.height = GH;
+    const st = { card, cells, GW, GH, mask, mctx: mask.getContext('2d'), b: 0, d: 0, key: '' };
+    ScrollTrigger.create({ trigger: card, start: 'top 98%', end: 'top 50%', scrub: true,
+      onUpdate: (self) => { st.b = self.progress; } , onRefresh: (self) => { st.b = self.progress; } });
+    ScrollTrigger.create({ trigger: card, start: 'top 28%', end: 'bottom 8%', scrub: true,
+      onUpdate: (self) => { st.d = self.progress; }, onRefresh: (self) => { st.d = self.progress; } });
+    return st;
   });
+
+  const BUILD_SPAN = 0.16, DUST_SPAN = 0.3;
+
+  function updateMask(st) {
+    const key = st.b.toFixed(3) + '|' + st.d.toFixed(3);
+    if (key === st.key) return;
+    st.key = key;
+    const { mctx, GW, GH } = st;
+    mctx.clearRect(0, 0, GW, GH);
+    mctx.fillStyle = '#000';
+    for (const c of st.cells) if (st.b >= c.th && st.d < c.th) mctx.fillRect(c.x, c.y, 1, 1);
+    const url = `url(${st.mask.toDataURL()})`;
+    st.card.style.webkitMaskImage = url; st.card.style.maskImage = url;
+  }
+
+  function drawParticles(st) {
+    const r = st.card.getBoundingClientRect();
+    if (r.bottom < -200 || r.top > innerHeight + 50) return;
+    const cw = r.width / st.GW, chh = r.height / st.GH;
+    const building = st.b > 0 && st.b < 1, dusting = st.d > 0 && st.d < 1;
+    if (!building && !dusting) return;
+    for (const c of st.cells) {
+      const ox = r.left + (c.x + 0.5) * cw, oy = r.top + (c.y + 0.5) * chh;
+      let t = -1, dx = 0, dy = 0;
+      if (building && st.b < c.th && st.b > c.th - BUILD_SPAN) {        // flying in toward its spot
+        t = (c.th - st.b) / BUILD_SPAN;
+        dx = -(60 + c.r1 * 160) * t; dy = (c.r2 - 0.5) * 120 * t;
+      } else if (dusting && st.d >= c.th && st.d < c.th + DUST_SPAN) {  // blowing away
+        t = (st.d - c.th) / DUST_SPAN;
+        const e = t * t;
+        dx = (80 + c.r1 * 260) * e; dy = -(40 + c.r2 * 200) * e + Math.sin(c.r1 * 12 + t * 6) * 8;
+      } else continue;
+      ctx.globalAlpha = (1 - t) * 0.9;
+      ctx.fillStyle = c.c;
+      const sz = Math.max(1.2, Math.min(3, cw * 0.26)) * (1 - t * 0.4);
+      // three fine specks per cell, spread inside the cell, so it reads as dust not pixels
+      ctx.fillRect(ox + dx, oy + dy, sz, sz);
+      ctx.fillRect(ox + dx * 1.15 + (c.r1 - 0.5) * cw, oy + dy * 0.9 + (c.r2 - 0.5) * chh, sz * 0.8, sz * 0.8);
+      ctx.fillRect(ox + dx * 0.85 + (c.r2 - 0.5) * cw, oy + dy * 1.1 + (c.r1 - 0.5) * chh, sz * 0.7, sz * 0.7);
+    }
+  }
+
+  gsap.ticker.add(() => {
+    ctx.clearRect(0, 0, fx.width, fx.height);
+    for (const st of states) { updateMask(st); drawParticles(st); }
+    ctx.globalAlpha = 1;
+  });
+  addEventListener('resize', () => ScrollTrigger.refresh());
 }
 
 // ===============================
