@@ -401,9 +401,22 @@ function initWork() {
   const bar = $('#workProgress');
   if (!track || !pin) return;
 
-  // one cheap transform/opacity fade per card, played once
+  // Scroll-scrubbed: cards build left->right as they enter,
+  // dissolve into thin vertical slats as they leave the top, and reverse on the way back up.
   $$('.work-card', track).forEach((card) => {
-    gsap.from(card, { y: 40, opacity: 0, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: card, start: 'top 88%', once: true } });
+    gsap.set(card, { '--slat': '48px' });
+    gsap.fromTo(card,
+      { clipPath: 'inset(0% 100% 0% 0% round 28px)' },
+      { clipPath: 'inset(0% 0% 0% 0% round 28px)', ease: 'none',
+        scrollTrigger: { trigger: card, start: 'top 95%', end: 'top 55%', scrub: 0.4 } });
+    gsap.fromTo(card.querySelectorAll('.work-spec li, .work-body > *'),
+      { x: -30, opacity: 0 },
+      { x: 0, opacity: 1, ease: 'none', stagger: 0.04,
+        scrollTrigger: { trigger: card, start: 'top 85%', end: 'top 50%', scrub: 0.4 } });
+    gsap.fromTo(card,
+      { '--slat': '48px', y: 0, opacity: 1 },
+      { '--slat': '0px', y: -40, opacity: 0.2, ease: 'power1.in',
+        scrollTrigger: { trigger: card, start: 'top 22%', end: 'bottom 5%', scrub: 0.4 } });
   });
 }
 

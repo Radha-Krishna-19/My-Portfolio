@@ -821,3 +821,12 @@ main { position: relative; z-index: 1; }
   .hero-right { justify-self: center; width: min(640px, 100%); }
 }
 @media (min-width: 901px) { .hero-right { width: min(640px, 100%, 70vh); } }
+
+/* v12 — project cards dissolve into slats: each 48px band keeps --slat px of itself */
+.work-card {
+  --slat: 48px;
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 var(--slat), transparent var(--slat) 48px);
+          mask-image: repeating-linear-gradient(90deg, #000 0 var(--slat), transparent var(--slat) 48px);
+}
+@media (prefers-reduced-motion: reduce) { .work-card { -webkit-mask-image: none; mask-image: none; } }
+.no-gsap .work-card { -webkit-mask-image: none; mask-image: none; }
