@@ -416,68 +416,110 @@ function initDust(cards) {
   fx.setAttribute('aria-hidden', 'true');
   document.body.appendChild(fx);
   const ctx = fx.getContext('2d');
-  const size = () => { fx.width = innerWidth; fx.height = innerHeight; };
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const size = () => { fx.width = innerWidth * DPR; fx.height = innerHeight * DPR; fx.style.width = innerWidth + 'px'; fx.style.height = innerHeight + 'px'; };
   size(); addEventListener('resize', size);
 
-  const rand = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
-  const COLORS = ['#3a3a44', '#55555f', '#8d8d97', '#e9e7df', '#c6ef4e'];
+  // deterministic pseudo-random, so the effect replays identically in reverse
+  const rnd = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 
+  // soft round sprites (dust specks) in a few tones
+  const sprite = (rgb) => {
+    const c = document.createElement('canvas'); c.width = c.height = 16;
+    const g = c.getContext('2d').createRadialGradient(8, 8, 0, 8, 8, 8);
+    g.addColorStop(0, `rgba(${rgb},1)`); g.addColorStop(0.35, `rgba(${rgb},.75)`); g.addColorStop(1, `rgba(${rgb},0)`);
+    const x = c.getContext('2d'); x.fillStyle = g; x.fillRect(0, 0, 16, 16); return c;
+  };
+  const SPRITES = [sprite('233,231,223'), sprite('160,160,170'), sprite('110,110,122'), sprite('198,239,78')];
+
+  // smooth value noise: gives the eroding edge an organic, ragged shape instead of steps
+  const makeNoise = (seed) => {
+    const G = 9, v = []; for (let i = 0; i < G * G; i++) v.push(rnd(seed + i));
+    return (u, w) => {
+      const x = u * (G - 1), y = w * (G - 1), x0 = Math.floor(x), y0 = Math.floor(y), fx_ = x - x0, fy = y - y0;
+      const at = (i, j) => v[Math.min(G - 1, j) * G + Math.min(G - 1, i)];
+      const sx = fx_ * fx_ * (3 - 2 * fx_), sy = fy * fy * (3 - 2 * fy);
+      const top = at(x0, y0) * (1 - sx) + at(x0 + 1, y0) * sx, bot = at(x0, y0 + 1) * (1 - sx) + at(x0 + 1, y0 + 1) * sx;
+      return top * (1 - sy) + bot * sy;
+    };
+  };
+  const thresholdAt = (noise, u, w, grain) => u * 0.74 + noise(u, w) * 0.18 + grain * 0.08;
+
+  const fine = matchMedia('(min-width: 900px)').matches;
   const states = cards.map((card, ci) => {
     const r = card.getBoundingClientRect();
-    const GW = 72, GH = Math.max(10, Math.min(60, Math.round(GW * r.height / r.width)));
-    const cells = [];
-    for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) {
-      const k = ci * 10000 + y * GW + x;
-      cells.push({ x, y, th: (x / GW) * 0.78 + rand(k) * 0.22, r1: rand(k + 1), r2: rand(k + 2),
-                   c: COLORS[rand(k + 3) < 0.06 ? 4 : Math.floor(rand(k + 4) * 4)] });
+    const noise = makeNoise(ci * 977 + 13);
+    const MW = 140, MH = Math.max(24, Math.min(220, Math.round(MW * r.height / r.width)));
+    const mask = document.createElement('canvas'); mask.width = MW; mask.height = MH;
+    const mctx = mask.getContext('2d');
+    const img = mctx.createImageData(MW, MH);
+    const pth = new Float32Array(MW * MH);
+    for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
+      const k = y * MW + x; pth[k] = thresholdAt(noise, x / MW, y / MH, rnd(ci * 100000 + k));
     }
-    const mask = document.createElement('canvas'); mask.width = GW; mask.height = GH;
-    const st = { card, cells, GW, GH, mask, mctx: mask.getContext('2d'), b: 0, d: 0, key: '' };
+    const N = Math.round(Math.min(fine ? 1800 : 1100, (r.width * r.height) / (fine ? 160 : 140)));
+    const parts = [];
+    for (let i = 0; i < N; i++) {
+      const k = ci * 50000 + i * 7, u = rnd(k), w = rnd(k + 1);
+      const tone = rnd(k + 2);
+      parts.push({ u, w, th: thresholdAt(noise, u, w, rnd(k + 3)),
+        sz: 0.7 + rnd(k + 4) * 1.6, spd: 0.6 + rnd(k + 5) * 0.9, ang: -0.35 - rnd(k + 6) * 0.7,
+        curl: (rnd(k + 8) - 0.5) * 2, ph: rnd(k + 9) * 6.28,
+        s: tone < 0.05 ? 3 : tone < 0.35 ? 0 : tone < 0.7 ? 1 : 2 });
+    }
+    const st = { card, MW, MH, mctx, img, pth, parts, b: 0, d: 0, key: '' };
     ScrollTrigger.create({ trigger: card, start: 'top 98%', end: 'top 50%', scrub: true,
-      onUpdate: (self) => { st.b = self.progress; } , onRefresh: (self) => { st.b = self.progress; } });
-    ScrollTrigger.create({ trigger: card, start: 'top 28%', end: 'bottom 8%', scrub: true,
+      onUpdate: (self) => { st.b = self.progress; }, onRefresh: (self) => { st.b = self.progress; } });
+    ScrollTrigger.create({ trigger: card, start: 'top 28%', end: 'bottom 6%', scrub: true,
       onUpdate: (self) => { st.d = self.progress; }, onRefresh: (self) => { st.d = self.progress; } });
     return st;
   });
 
-  const BUILD_SPAN = 0.16, DUST_SPAN = 0.3;
+  const EDGE = 0.035, BUILD_SPAN = 0.2, DUST_SPAN = 0.38;
+  const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
 
   function updateMask(st) {
     const key = st.b.toFixed(3) + '|' + st.d.toFixed(3);
     if (key === st.key) return;
     st.key = key;
-    const { mctx, GW, GH } = st;
-    mctx.clearRect(0, 0, GW, GH);
-    mctx.fillStyle = '#000';
-    for (const c of st.cells) if (st.b >= c.th && st.d < c.th) mctx.fillRect(c.x, c.y, 1, 1);
-    const url = `url(${st.mask.toDataURL()})`;
+    const { img, pth } = st, data = img.data;
+    // overshoot so the card is fully solid at the ends of each range
+    const b = st.b * 1.08, d = st.d * 1.08 - 0.04;
+    for (let k = 0; k < pth.length; k++) {
+      const th = pth[k];
+      const a = clamp01((b - th) / EDGE) * clamp01((th - d) / EDGE);
+      data[k * 4 + 3] = a * 255;
+    }
+    st.mctx.putImageData(img, 0, 0);
+    const url = `url(${st.mctx.canvas.toDataURL()})`;
     st.card.style.webkitMaskImage = url; st.card.style.maskImage = url;
   }
 
   function drawParticles(st) {
     const r = st.card.getBoundingClientRect();
-    if (r.bottom < -200 || r.top > innerHeight + 50) return;
-    const cw = r.width / st.GW, chh = r.height / st.GH;
+    if (r.bottom < -300 || r.top > innerHeight + 80) return;
+    const b = st.b * 1.08, d = st.d * 1.08 - 0.04;
     const building = st.b > 0 && st.b < 1, dusting = st.d > 0 && st.d < 1;
     if (!building && !dusting) return;
-    for (const c of st.cells) {
-      const ox = r.left + (c.x + 0.5) * cw, oy = r.top + (c.y + 0.5) * chh;
-      let t = -1, dx = 0, dy = 0;
-      if (building && st.b < c.th && st.b > c.th - BUILD_SPAN) {        // flying in toward its spot
-        t = (c.th - st.b) / BUILD_SPAN;
-        dx = -(60 + c.r1 * 160) * t; dy = (c.r2 - 0.5) * 120 * t;
-      } else if (dusting && st.d >= c.th && st.d < c.th + DUST_SPAN) {  // blowing away
-        t = (st.d - c.th) / DUST_SPAN;
+    for (const p of st.parts) {
+      let t, dx, dy;
+      if (building && b < p.th && b > p.th - BUILD_SPAN) {
+        t = (p.th - b) / BUILD_SPAN;                     // 1 = far away, 0 = landed
         const e = t * t;
-        dx = (80 + c.r1 * 260) * e; dy = -(40 + c.r2 * 200) * e + Math.sin(c.r1 * 12 + t * 6) * 8;
+        dx = -Math.cos(p.ang) * 260 * p.spd * e + Math.sin(p.ph + t * 5) * 14 * p.curl * t;
+        dy = -Math.sin(p.ang) * 120 * p.spd * e + Math.cos(p.ph + t * 4) * 10 * t;
+      } else if (dusting && d >= p.th && d < p.th + DUST_SPAN) {
+        t = (d - p.th) / DUST_SPAN;                      // 0 = just broke off, 1 = gone
+        const e = Math.pow(t, 1.5);
+        dx = Math.cos(p.ang) * 340 * p.spd * e + Math.sin(p.ph + t * 6) * 18 * p.curl * t;
+        dy = Math.sin(p.ang) * 230 * p.spd * e + Math.cos(p.ph + t * 5) * 12 * t;
       } else continue;
-      ctx.globalAlpha = (1 - t) * 0.9;
-      ctx.fillStyle = c.c;
-      const sz = Math.max(1.2, Math.min(3, cw * 0.26)) * (1 - t * 0.4);
-      // three fine specks per cell, spread inside the cell, so it reads as dust not pixels
-      ctx.fillRect(ox + dx, oy + dy, sz, sz);
-      ctx.fillRect(ox + dx * 1.15 + (c.r1 - 0.5) * cw, oy + dy * 0.9 + (c.r2 - 0.5) * chh, sz * 0.8, sz * 0.8);
-      ctx.fillRect(ox + dx * 0.85 + (c.r2 - 0.5) * cw, oy + dy * 1.1 + (c.r1 - 0.5) * chh, sz * 0.7, sz * 0.7);
+      const alpha = Math.pow(1 - t, 1.4) * 0.85;
+      if (alpha < 0.02) continue;
+      const x = r.left + p.u * r.width + dx, y = r.top + p.w * r.height + dy;
+      const sz = p.sz * (1 - t * 0.35) * 2.4;
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(SPRITES[p.s], (x - sz / 2) * DPR, (y - sz / 2) * DPR, sz * DPR, sz * DPR);
     }
   }
 
