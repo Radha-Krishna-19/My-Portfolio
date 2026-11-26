@@ -44,16 +44,6 @@
   <div class="cursor-dot" aria-hidden="true"></div>
   <div class="cursor-ring" aria-hidden="true"><span class="cursor-label">View</span></div>
 
-  <!-- Loader -->
-  <div id="loader" aria-hidden="true">
-    <div class="loader-panel loader-top"></div>
-    <div class="loader-panel loader-bottom"></div>
-    <div class="loader-inner">
-      <div class="loader-name"><span>Radha</span><span>Krishna</span></div>
-      <div class="loader-count"><span id="loaderCount">0</span>%</div>
-    </div>
-  </div>
-
   <!-- Navbar -->
   <nav class="navbar" id="navbar">
     <a href="#home" class="logo" data-cursor="link"><span class="logo-mark">RK</span><span class="logo-text">Radha Krishna</span></a>
@@ -81,10 +71,10 @@
 
       <div class="hero-grid">
         <div class="hero-left">
-          <p class="hero-kicker mono hero-fade">Hi, I'm —</p>
+          <p class="hero-kicker mono hero-fade" data-scramble>Hi, I'm —</p>
           <h1 class="hero-title" aria-label="P.M. Radha Krishna">
-            <span class="hero-line hero-line-1" data-split>Radha</span>
-            <span class="hero-line hero-line-2"><span data-split>Krishna</span><span class="hero-dot">.</span></span>
+            <span class="hero-line hero-line-1"><span data-split>Radha</span><i class="wipe" aria-hidden="true"></i></span>
+            <span class="hero-line hero-line-2"><span data-split>Krishna</span><span class="hero-dot">.</span><i class="wipe" aria-hidden="true"></i></span>
           </h1>
           <p class="hero-role hero-fade">ML &amp; Full-Stack Engineer <span class="role-sep">/</span> <span class="muted">B.Tech CSE '27</span></p>
           <p class="hero-subtitle hero-fade">
@@ -93,8 +83,8 @@
             deployed backends.
           </p>
           <div class="hero-buttons hero-fade">
-            <a href="#work" class="btn btn-primary magnetic" data-cursor="link"><span>View Projects</span><span class="btn-arrow">→</span></a>
-            <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="btn btn-ghost magnetic" data-cursor="link"><span>Download Resume</span><span class="btn-arrow">↓</span></a>
+            <a href="#work" class="btn btn-primary magnetic" data-cursor="link"><span class="roll" data-text="View Projects"><span>View Projects</span></span><span class="btn-arrow">→</span></a>
+            <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="btn btn-ghost magnetic" data-cursor="link"><span class="roll" data-text="Download Resume"><span>Download Resume</span></span><span class="btn-arrow">↓</span></a>
           </div>
           <div class="hero-socials hero-fade">
             <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn magnetic" aria-label="GitHub">
@@ -143,7 +133,7 @@
     <!-- ============ ABOUT ============ -->
     <section id="about" class="section">
       <div class="section-head">
-        <span class="section-kicker mono">(01) — Get to know me</span>
+        <span class="section-kicker mono" data-scramble>(01) — Get to know me</span>
       </div>
 
       <p class="statement" id="statement">
@@ -213,7 +203,7 @@
     <section id="work" class="work">
       <div class="work-pin">
         <div class="work-head">
-          <span class="section-kicker mono">(02) — Things I've built</span>
+          <span class="section-kicker mono" data-scramble>(02) — Things I've built</span>
           <h2 class="section-title big" data-split-title>Selected Work</h2>
           <div class="work-progress"><span id="workProgress"></span></div>
         </div>
@@ -298,7 +288,7 @@
     <section id="projects" class="section more">
       <div class="section-head row">
         <div>
-          <span class="section-kicker mono">Weekend builds &amp; experiments</span>
+          <span class="section-kicker mono" data-scramble>Weekend builds &amp; experiments</span>
           <h2 class="section-title" data-split-title>More Builds</h2>
         </div>
         <div class="filter-bar">
@@ -352,7 +342,7 @@
     <!-- ============ SKILLS ============ -->
     <section id="skills" class="section">
       <div class="section-head">
-        <span class="section-kicker mono">(03) — What I work with</span>
+        <span class="section-kicker mono" data-scramble>(03) — What I work with</span>
         <h2 class="section-title" data-split-title>Skills &amp; Tools</h2>
       </div>
 
@@ -379,7 +369,7 @@
     <!-- ============ ACHIEVEMENTS ============ -->
     <section id="achievements" class="section">
       <div class="section-head">
-        <span class="section-kicker mono">(04) — Beyond the code</span>
+        <span class="section-kicker mono" data-scramble>(04) — Beyond the code</span>
         <h2 class="section-title" data-split-title>Hackathons &amp; Leadership</h2>
       </div>
 
@@ -434,7 +424,7 @@
 
       <div class="contact-grid">
         <div class="contact-info" data-reveal>
-          <span class="section-kicker mono">(05) — Get in touch</span>
+          <span class="section-kicker mono" data-scramble>(05) — Get in touch</span>
           <h2 class="contact-title">Hiring for ML or backend work?<br><span class="accent">Let's talk.</span></h2>
           <p>Open to internships, collaborations, and project discussions across software, ML and systems — I usually reply within a day or two.</p>
 
@@ -461,7 +451,7 @@
             <label class="field"><input type="email" name="email" placeholder=" " required /><span>Your Email *</span></label>
           </div>
           <label class="field"><textarea name="message" rows="5" placeholder=" " required></textarea><span>Your Message *</span></label>
-          <button type="submit" class="btn btn-primary magnetic full" data-cursor="link"><span>Send Message</span><span class="btn-arrow">→</span></button>
+          <button type="submit" class="btn btn-primary magnetic full" data-cursor="link"><span class="roll" data-text="Send Message"><span>Send Message</span></span><span class="btn-arrow">→</span></button>
           <div id="successMsg" class="success-message">Message sent — I'll get back to you soon.</div>
         </form>
       </div>

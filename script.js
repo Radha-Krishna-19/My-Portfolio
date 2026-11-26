@@ -93,7 +93,6 @@ function initLenis() {
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
-  lenis.stop(); // paused until loader finishes
 }
 
 function scrollToTarget(target) {
@@ -119,53 +118,99 @@ function initAnchors() {
 // 4. LOADER + HERO INTRO
 // ===============================
 function runIntro() {
-  const loader = $('#loader');
-  const countEl = $('#loaderCount');
-
-  // Prepare hero split text
   const heroChars = $$('.hero-title [data-split]').flatMap((el) => maskTitle(el));
+  if (!MOTION) { document.documentElement.classList.add('intro-ready'); return; }
 
-  if (!MOTION) {
-    if (loader) loader.remove();
-    return;
-  }
-
-  gsap.set(heroChars, { yPercent: 115, rotate: 6 });
+  const wipes = $$('.hero-line .wipe');
+  document.documentElement.classList.add('intro-ready');
+  gsap.set(heroChars, { opacity: 0 });
   gsap.set('.hero-dot', { scale: 0, transformOrigin: '50% 80%' });
   gsap.set('.hero-fade', { y: 24, opacity: 0 });
   gsap.set('.hero-meta > span', { y: 14, opacity: 0 });
   gsap.set('.photo-inner', { clipPath: 'inset(100% 0% 0% 0%)' });
-  gsap.set('.photo-img', { scale: 1.35 });
-  gsap.set(['.float-card', '.spin-badge'], { scale: 0.6, opacity: 0 });
+  gsap.set('.photo-img', { scale: 1.3 });
+  gsap.set(['.float-card', '.spec-card'], { y: 30, opacity: 0 });
   gsap.set('.navbar', { yPercent: -100, opacity: 0 });
-  gsap.set('.loader-name span', { yPercent: 110 });
 
-  const counter = { v: 0 };
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  // each line: bar sweeps in from the left, letters appear under it, bar exits to the right
+  wipes.forEach((w, i) => {
+    const line = w.closest('.hero-line');
+    const chars = $$('.split-char', line);
+    const at = i * 0.18;
+    tl.fromTo(w, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.45, ease: 'expo.inOut' }, at)
+      .set(chars, { opacity: 1 }, at + 0.45)
+      .set(w, { transformOrigin: '100% 50%' }, at + 0.45)
+      .to(w, { scaleX: 0, duration: 0.5, ease: 'expo.inOut' }, at + 0.45);
+  });
+  tl.to('.hero-dot', { scale: 1, duration: 0.8, ease: 'elastic.out(1, 0.45)' }, 0.95)
+    .to('.photo-inner', { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'expo.inOut' }, 0.2)
+    .to('.photo-img', { scale: 1, duration: 1.6 }, 0.2)
+    .to('.navbar', { yPercent: 0, opacity: 1, duration: 0.9 }, 0.5)
+    .to('.hero-meta > span', { y: 0, opacity: 1, duration: 0.7, stagger: 0.05 }, 0.6)
+    .to('.hero-fade', { y: 0, opacity: 1, duration: 0.9, stagger: 0.07 }, 0.8)
+    .to(['.float-card', '.spec-card'], { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'back.out(1.6)' }, 1.0)
+    .add(() => { startFloatCards(); initHeroWave(); ScrollTrigger.refresh(); });
+}
 
-  tl.to('.loader-name span', { yPercent: 0, duration: 0.6, stagger: 0.06 })
-    .to(counter, {
-      v: 100, duration: 0.9, ease: 'power2.inOut',
-      onUpdate: () => { if (countEl) countEl.textContent = Math.round(counter.v); },
-    }, 0)
-    .to('.loader-inner', { opacity: 0, duration: 0.35, ease: 'power2.in' }, '>-0.05')
-    .to('.loader-top', { yPercent: -100, duration: 0.9, ease: 'expo.inOut' }, '<+0.1')
-    .to('.loader-bottom', { yPercent: 100, duration: 0.9, ease: 'expo.inOut' }, '<')
-    .add(() => { if (loader) loader.style.pointerEvents = 'none'; }, '<+0.3')
-    .to(heroChars, { yPercent: 0, rotate: 0, duration: 1.3, stagger: 0.035 }, '<+0.35')
-    .to('.hero-dot', { scale: 1, duration: 0.9, ease: 'elastic.out(1, 0.45)' }, '>-0.6')
-    .to('.photo-inner', { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut' }, '<-0.9')
-    .to('.photo-img', { scale: 1, duration: 1.8 }, '<')
-    .to('.hero-fade', { y: 0, opacity: 1, duration: 1, stagger: 0.08 }, '<+0.3')
-    .to('.hero-meta > span', { y: 0, opacity: 1, duration: 0.8, stagger: 0.06 }, '<')
-    .to('.navbar', { yPercent: 0, opacity: 1, duration: 1 }, '<')
-    .to(['.float-card', '.spin-badge'], { scale: 1, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'back.out(1.8)' }, '<+0.2')
-    .add(() => {
-      if (loader) loader.remove();
-      if (lenis) lenis.start();
-      startFloatCards();
-      ScrollTrigger.refresh();
+// Letters of the name lift in a wave when the cursor passes over them
+function initHeroWave() {
+  if (!FINE_POINTER) return;
+  $$('.hero-title .split-char').forEach((c) => {
+    c.addEventListener('mouseenter', () => {
+      gsap.fromTo(c, { yPercent: 0 }, { yPercent: -14, duration: 0.25, ease: 'power2.out', yoyo: true, repeat: 1, overwrite: true });
+      gsap.fromTo(c, { color: 'var(--accent)' }, { color: 'var(--text)', duration: 0.9, ease: 'power1.out' });
     });
+  });
+}
+
+// Mono labels decode from random glyphs when they scroll into view
+function initScramble() {
+  if (!MOTION) return;
+  const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*/<>_';
+  $$('[data-scramble]').forEach((el) => {
+    const final = el.textContent;
+    ScrollTrigger.create({
+      trigger: el, start: 'top 92%', once: true,
+      onEnter: () => {
+        const obj = { p: 0 };
+        gsap.to(obj, {
+          p: 1, duration: 0.8, ease: 'none',
+          onUpdate: () => {
+            const n = Math.floor(obj.p * final.length);
+            let out = final.slice(0, n);
+            for (let i = n; i < final.length; i++) out += final[i] === ' ' ? ' ' : glyphs[(Math.random() * glyphs.length) | 0];
+            el.textContent = out;
+          },
+          onComplete: () => { el.textContent = final; },
+        });
+      },
+    });
+  });
+}
+
+// Cards lean with scroll speed, then settle (follow-through)
+function initVelocitySkew() {
+  if (!MOTION) return;
+  const cards = $$('.work-card');
+  if (!cards.length) return;
+  const skewTo = gsap.quickTo(cards, 'skewX', { duration: 0.6, ease: 'power3' });
+  ScrollTrigger.create({
+    trigger: '#work', start: 'top bottom', end: 'bottom top',
+    onUpdate: (self) => skewTo(gsap.utils.clamp(-6, 6, self.getVelocity() / -400)),
+    onLeave: () => skewTo(0), onLeaveBack: () => skewTo(0),
+  });
+}
+
+// Footer wordmark letters rise one by one
+function initFooterLetters() {
+  const big = $('.footer-big');
+  if (!big || !MOTION) return;
+  const chars = splitChars(big);
+  gsap.from(chars, {
+    yPercent: 100, opacity: 0, duration: 1, ease: 'expo.out', stagger: 0.035,
+    scrollTrigger: { trigger: '.site-footer', start: 'top 85%' },
+  });
 }
 
 function startFloatCards() {
@@ -423,10 +468,7 @@ function initTimeline() {
 // ===============================
 function initFooter() {
   if (!MOTION) return;
-  gsap.from('.footer-big', {
-    yPercent: 60, opacity: 0, ease: 'none',
-    scrollTrigger: { trigger: '.site-footer', start: 'top bottom', end: 'bottom bottom', scrub: true },
-  });
+  initFooterLetters();
 }
 
 // ===============================
@@ -675,7 +717,7 @@ function initContactForm() {
       alert('EmailJS not loaded. Please email directly: pradhakrishna594@gmail.com');
       return;
     }
-    const btn = form.querySelector('button[type="submit"] span');
+    const btn = form.querySelector('button[type="submit"] .roll > span');
     const original = btn ? btn.textContent : '';
     const submit = form.querySelector('button[type="submit"]');
     if (btn) btn.textContent = 'Sending...';
@@ -719,6 +761,8 @@ function init() {
   initWork();
   initTimeline();
   initFooter();
+  initScramble();
+  initVelocitySkew();
   initCursor();
   initMagnetic();
   initTilt();
@@ -729,7 +773,7 @@ function init() {
 
   const start = () => runIntro();
   if (document.fonts && document.fonts.ready) {
-    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 500))]).then(start);
+    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 350))]).then(start);
   } else {
     start();
   }

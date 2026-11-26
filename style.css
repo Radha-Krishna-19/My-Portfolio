@@ -97,24 +97,6 @@ body.cursor-view .cursor-dot { opacity: 0; }
   body.has-cursor, body.has-cursor a, body.has-cursor button { cursor: none; }
 }
 
-/* ---------- loader ---------- */
-#loader { display: none; }
-.js #loader {
-  display: block; position: fixed; inset: 0; z-index: 300; pointer-events: all;
-  animation: loaderFailsafe .6s ease 5s forwards; /* only if scripts never run */
-}
-@keyframes loaderFailsafe { to { opacity: 0; visibility: hidden; } }
-.loader-panel { position: absolute; left: 0; right: 0; height: 50.5%; background: #0b0b0f; }
-.loader-top { top: 0; }
-.loader-bottom { bottom: 0; }
-.loader-inner {
-  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between;
-  padding: 32px var(--pad-x);
-}
-.loader-name { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 4vw, 48px); text-transform: uppercase; line-height: 1; display: flex; gap: .3em; overflow: hidden; }
-.loader-name span { display: inline-block; }
-.loader-count { align-self: flex-end; font-family: var(--font-display); font-weight: 800; font-size: clamp(80px, 18vw, 260px); line-height: .85; color: var(--accent); letter-spacing: -.04em; }
-
 /* ---------- navbar ---------- */
 .navbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -540,7 +522,6 @@ main { position: relative; z-index: 1; }
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .js #loader { display: none; }
 }
 
 /* =========================================================
@@ -660,3 +641,43 @@ main { position: relative; z-index: 1; }
 /* softer glass elsewhere */
 .spec-card { background: #0d0d11; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .navbar.scrolled { background: rgba(8, 8, 11, .92); }
+
+/* =========================================================
+   v5 — intro without a loading screen, richer micro-motion
+   ========================================================= */
+/* Name wipe: a lime bar sweeps across each line and reveals it */
+.hero-line { position: relative; width: fit-content; }
+.hero-line .wipe {
+  position: absolute; left: 0; right: 0; top: 6%; bottom: 4%; z-index: 2;
+  background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; pointer-events: none; display: none;
+}
+.js .hero-line .wipe { display: block; }
+.no-gsap .hero-line .wipe { display: none; }
+
+/* Hero letters lift in a wave on hover */
+.hero-title .split-char { transition: transform .5s var(--ease), color .3s; }
+
+/* Button label rolls up, a copy rolls in from below */
+.roll { position: relative; display: inline-block; overflow: hidden; vertical-align: top; }
+.roll > span { display: inline-block; transition: transform .45s var(--ease); }
+.roll::after {
+  content: attr(data-text); position: absolute; left: 0; top: 100%; white-space: nowrap;
+  transition: transform .45s var(--ease);
+}
+.btn:hover .roll > span, .btn:hover .roll::after { transform: translateY(-100%); }
+
+/* Decoding labels keep their width steady */
+[data-scramble] { font-variant-numeric: tabular-nums; }
+
+/* Velocity skew target */
+.work-card { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover .roll > span, .btn:hover .roll::after { transform: none; }
+}
+
+/* Hide the hero until the intro script takes over (failsafe shows it after 2.5s regardless) */
+.js .hero-title, .js .hero-fade, .js .photo-card, .js .hero-meta, .js .spec-card, .js .float-card { visibility: hidden; animation: heroFailsafe 0s linear 2.5s forwards; }
+.no-gsap .hero-title, .no-gsap .hero-fade, .no-gsap .photo-card, .no-gsap .hero-meta, .no-gsap .spec-card, .no-gsap .float-card { visibility: visible; animation: none; }
+.intro-ready .hero-title, .intro-ready .hero-fade, .intro-ready .photo-card, .intro-ready .hero-meta, .intro-ready .spec-card, .intro-ready .float-card { visibility: visible; animation: none; }
+@keyframes heroFailsafe { to { visibility: visible; } }
