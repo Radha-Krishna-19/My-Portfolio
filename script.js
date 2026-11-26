@@ -89,7 +89,7 @@ function maskTitle(el) {
 // ===============================
 function initLenis() {
   if (!MOTION || typeof window.Lenis === 'undefined') return;
-  lenis = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+  lenis = new Lenis({ duration: 0.9, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
@@ -150,7 +150,20 @@ function runIntro() {
     .to('.hero-meta > span', { y: 0, opacity: 1, duration: 0.7, stagger: 0.05 }, 0.6)
     .to('.hero-fade', { y: 0, opacity: 1, duration: 0.9, stagger: 0.07 }, 0.8)
     .to('.float-card', { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'back.out(1.6)' }, 1.0)
-    .add(() => { startFloatCards(); initHeroWave(); initHeroScroll(); ScrollTrigger.refresh(); });
+    .add(() => { initHeroScroll(); ScrollTrigger.refresh(); });
+}
+
+// A soft light follows the cursor across the hero
+function initSpotlight() {
+  const hero = $('.hero');
+  if (!hero || !FINE_POINTER) return;
+  const x = gsap.quickTo(hero, '--hx', { duration: 0.9, ease: 'power3' });
+  const y = gsap.quickTo(hero, '--hy', { duration: 0.9, ease: 'power3' });
+  hero.addEventListener('mousemove', (e) => {
+    const r = hero.getBoundingClientRect();
+    x(((e.clientX - r.left) / r.width) * 100);
+    y(((e.clientY - r.top) / r.height) * 100);
+  });
 }
 
 // Letters of the name lift in a wave when the cursor passes over them
@@ -224,20 +237,13 @@ function startFloatCards() {
 function initHeroScroll() {
   if (!MOTION) return;
 
-  ScrollTrigger.matchMedia({
-    '(min-width: 900px)': () => {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: '.hero', start: 'top top', end: '+=65%', scrub: 0.8, pin: true, anticipatePin: 1 },
-      });
-      tl.to('.hero-line-1', { xPercent: -22, ease: 'none' }, 0)
-        .to('.hero-line-2', { xPercent: 18, ease: 'none' }, 0)
-        .to(['.hero-fade', '.hero-kicker', '.hero-meta'], { opacity: 0, y: -24, ease: 'none' }, 0)
-        .to('.hero-right', { scale: 1.12, x: '-6vw', ease: 'none' }, 0)
-        .to('.hero-title', { opacity: 0.12, ease: 'none' }, 0.35);
-    },
-    '(max-width: 899px)': () => {
-    },
-  });
+  const st = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
+  gsap.to('.hero-line-1', { xPercent: -6, ease: 'none', scrollTrigger: st });
+  gsap.to('.hero-line-2', { xPercent: 6, ease: 'none', scrollTrigger: st });
+  gsap.to('.hero-left', { opacity: 0, y: -40, ease: 'none', scrollTrigger: { ...st, end: '80% top' } });
+  gsap.to('.hero-right', { y: -60, ease: 'none', scrollTrigger: st });
+  initSpotlight();
+  return;
 
   const card = $('#photoCard');
   if (!card || !FINE_POINTER) return;
@@ -395,34 +401,12 @@ function initWork() {
   const bar = $('#workProgress');
   if (!track || !pin) return;
 
-  ScrollTrigger.matchMedia({
-    '(min-width: 900px)': () => {
-      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
-      const tween = gsap.to(track, {
-        x: () => -distance(), ease: 'none',
-        scrollTrigger: {
-          trigger: pin, start: 'top top', end: () => `+=${distance()}`,
-          pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1,
-          onUpdate: (self) => { if (bar) gsap.set(bar, { scaleX: self.progress }); },
-        },
-      });
-
-      // glyphs drift as their card crosses the screen
-      $$('.work-glyph', track).forEach((g) => {
-        gsap.fromTo(g, { xPercent: 40, rotate: 10 }, {
-          xPercent: -40, rotate: -10, ease: 'none',
-          scrollTrigger: { trigger: g.closest('.work-card'), containerAnimation: tween, start: 'left right', end: 'right left', scrub: true },
-        });
-      });
-      return () => gsap.set(track, { clearProps: 'transform' });
-    },
-    '(max-width: 899px)': () => {
-      $$('.work-card', track).forEach((card) => {
-        const st = { trigger: card, start: 'top 90%' };
-        gsap.from(card, { x: -24, opacity: 0, duration: 0.9, ease: 'sine.out', scrollTrigger: st });
-        gsap.from(card, { y: 70, rotate: -1.5, duration: 0.9, ease: 'expo.out', scrollTrigger: { ...st } });
-      });
-    },
+  $$('.work-card', track).forEach((card) => {
+    const visual = card.querySelector('.work-visual');
+    const body = card.querySelector('.work-body');
+    const tl = gsap.timeline({ scrollTrigger: { trigger: card, start: 'top 82%' } });
+    if (visual) tl.fromTo(visual, { clipPath: 'inset(18% 0% 0% 0% round 28px)' }, { clipPath: 'inset(0% 0% 0% 0% round 28px)', duration: 1.1, ease: 'expo.out' }, 0);
+    if (body) tl.from(body.children, { y: 26, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.06 }, 0.1);
   });
 }
 
@@ -512,8 +496,8 @@ function initMagnetic() {
     const yTo = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'elastic.out(1, 0.4)' });
     el.addEventListener('mousemove', (e) => {
       const r = el.getBoundingClientRect();
-      xTo((e.clientX - (r.left + r.width / 2)) * 0.35);
-      yTo((e.clientY - (r.top + r.height / 2)) * 0.35);
+      xTo((e.clientX - (r.left + r.width / 2)) * 0.18);
+      yTo((e.clientY - (r.top + r.height / 2)) * 0.18);
     });
     el.addEventListener('mouseleave', () => { xTo(0); yTo(0); });
   });
@@ -828,11 +812,7 @@ function init() {
   initWork();
   initTimeline();
   initFooter();
-  initScramble();
-  initVelocitySkew();
-  initCursor();
   initMagnetic();
-  initTilt();
   initProjectFilter();
   initDetail();
   initContactForm();

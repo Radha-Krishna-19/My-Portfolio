@@ -19,7 +19,7 @@
   <!-- Fonts & icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@2.15.1/devicon.min.css">
   <link rel="stylesheet" href="style.css" />
 
@@ -39,10 +39,6 @@
   <div class="orb orb-a" aria-hidden="true"></div>
   <div class="orb orb-b" aria-hidden="true"></div>
   <div id="scroll-progress" aria-hidden="true"></div>
-
-  <!-- Cursor -->
-  <div class="cursor-dot" aria-hidden="true"></div>
-  <div class="cursor-ring" aria-hidden="true"><span class="cursor-label">View</span></div>
 
   <!-- Navbar -->
   <nav class="navbar" id="navbar">
@@ -77,6 +73,7 @@
             <span class="hero-line hero-line-2"><span data-split>Krishna</span><span class="hero-dot">.</span><i class="wipe" aria-hidden="true"></i></span>
           </h1>
           <p class="hero-role hero-fade">ML &amp; Full-Stack Engineer <span class="role-sep">/</span> <span class="muted">B.Tech CSE '27</span></p>
+          <p class="hero-tagline hero-fade">Machine learning, full-stack, and a growing obsession with <em>security</em>.</p>
           <p class="hero-subtitle hero-fade">
             Final-year CSE undergraduate at Amrita Vishwa Vidyapeetham, Coimbatore, building applied
             AI/ML and full-stack systems end to end — from model training to production-hardened,
@@ -150,7 +147,7 @@
         </div>
 
         <div class="about-side">
-          <div class="edu-card tilt" data-reveal>
+          <div class="edu-card" data-reveal>
             <div class="edu-icon mono">EDU</div>
             <div>
               <h4>B.Tech, Computer Science &amp; Engineering</h4>
@@ -158,7 +155,7 @@
               <p class="edu-meta mono">2023 – 2027 (Expected) · CGPA 7.07</p>
             </div>
           </div>
-          <div class="exp-card tilt" data-reveal>
+          <div class="exp-card" data-reveal>
             <div class="exp-top">
               <span class="mono exp-date">Sep 2025 – Oct 2026</span>
               <span class="exp-badge mono">Internship</span>
@@ -292,37 +289,37 @@
       </div>
 
       <div class="mini-grid">
-        <div class="mini-card tilt" data-category="software" data-reveal>
+        <div class="mini-card" data-category="software" data-reveal>
           <div class="mini-top"><span class="mono mini-num">01</span><span class="mono mini-stack">Python · CLI</span></div>
           <h4>Attendance Manager (CLI)</h4>
           <p>Python CLI tool that automates ID-card attendance marking for classes and events.</p>
         </div>
-        <div class="mini-card tilt" data-category="software" data-reveal>
+        <div class="mini-card" data-category="software" data-reveal>
           <div class="mini-top"><span class="mono mini-num">02</span><span class="mono mini-stack">Python · Minimax</span></div>
           <h4>Stockfish-style Chess Engine</h4>
           <p>Chess engine in Python using minimax search with alpha-beta pruning to cut the explored game tree.</p>
         </div>
-        <div class="mini-card tilt" data-category="web" data-reveal>
+        <div class="mini-card" data-category="web" data-reveal>
           <div class="mini-top"><span class="mono mini-num">03</span><span class="mono mini-stack">Python · Analysis</span></div>
           <h4>Spotube Case Study</h4>
           <p>Reverse-engineered case study on how Python functions power the Spotube music app.</p>
         </div>
-        <div class="mini-card tilt" data-category="web" data-reveal>
+        <div class="mini-card" data-category="web" data-reveal>
           <div class="mini-top"><span class="mono mini-num">04</span><span class="mono mini-stack">JavaScript · UI</span></div>
           <h4>Local Chess UI</h4>
           <p>A local chess interface linked to and playable against the original chess engine website.</p>
         </div>
-        <div class="mini-card tilt" data-category="embedded" data-reveal>
+        <div class="mini-card" data-category="embedded" data-reveal>
           <div class="mini-top"><span class="mono mini-num">05</span><span class="mono mini-stack">TinkerCAD · Sensors</span></div>
           <h4>Plant Monitoring System</h4>
           <p>Sensor-driven plant health monitoring circuit prototyped and simulated in TinkerCAD.</p>
         </div>
-        <div class="mini-card tilt" data-category="software" data-reveal>
+        <div class="mini-card" data-category="software" data-reveal>
           <div class="mini-top"><span class="mono mini-num">06</span><span class="mono mini-stack">Python · Ropes / Piece table</span></div>
           <h4>Python Notepad</h4>
           <p>A from-scratch notepad app in Python built using ropes, piece tables and stacks for efficient text editing.</p>
         </div>
-        <div class="mini-card tilt" data-category="ml" data-reveal>
+        <div class="mini-card" data-category="ml" data-reveal>
           <div class="mini-top"><span class="mono mini-num">07</span><span class="mono mini-stack">YOLOv8 · OCR</span></div>
           <h4>YOLO Handwritten Math → LaTeX</h4>
           <p>Trained a YOLOv8 detector to recognise handwritten math symbols and convert them into LaTeX.</p>
@@ -416,7 +413,7 @@
       <div class="contact-grid">
         <div class="contact-info" data-reveal>
           <span class="section-kicker mono" data-scramble>(05) — Get in touch</span>
-          <h2 class="contact-title">Hiring for ML or backend work?<br><span class="accent">Let's talk.</span></h2>
+          <h2 class="contact-title">Hiring for ML or backend work?<br><em class="serif">Let's talk.</em></h2>
           <p>Open to internships, collaborations, and project discussions across software, ML and systems — I usually reply within a day or two.</p>
 
           <div class="contact-lines">
