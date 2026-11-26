@@ -401,12 +401,9 @@ function initWork() {
   const bar = $('#workProgress');
   if (!track || !pin) return;
 
+  // one cheap transform/opacity fade per card, played once
   $$('.work-card', track).forEach((card) => {
-    const visual = card.querySelector('.work-visual');
-    const body = card.querySelector('.work-body');
-    const tl = gsap.timeline({ scrollTrigger: { trigger: card, start: 'top 82%' } });
-    if (visual) tl.fromTo(visual, { clipPath: 'inset(18% 0% 0% 0% round 28px)' }, { clipPath: 'inset(0% 0% 0% 0% round 28px)', duration: 1.1, ease: 'expo.out' }, 0);
-    if (body) tl.from(body.children, { y: 26, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.06 }, 0.1);
+    gsap.from(card, { y: 40, opacity: 0, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: card, start: 'top 88%', once: true } });
   });
 }
 
@@ -807,7 +804,6 @@ function init() {
   initReveals();
   initCounters();
   initOdometers();
-  initStack();
   initHighlights();
   initWork();
   initTimeline();

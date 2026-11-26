@@ -806,3 +806,9 @@ main { position: relative; z-index: 1; }
 /* Calmer interactions everywhere */
 .work-card:hover .work-spec { transform: none; }
 .timeline-card:hover { transform: none; }
+
+/* v10 — smooth scrolling: static grain (was re-painting every frame), cheap card reveals */
+.noise { animation: none; inset: 0; }
+.work-card { will-change: auto; }
+.work-visual::after { will-change: auto; }
+.skill-foot { color: var(--muted); font-size: 11px; margin-top: 16px; }
