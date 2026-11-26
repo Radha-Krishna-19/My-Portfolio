@@ -119,7 +119,7 @@ function initAnchors() {
 // ===============================
 function runIntro() {
   const heroChars = $$('.hero-title [data-split]').flatMap((el) => maskTitle(el));
-  if (!MOTION) { document.documentElement.classList.add('intro-ready'); return; }
+  if (!MOTION) { document.documentElement.classList.add('intro-ready'); initHeroScroll(); return; }
 
   const wipes = $$('.hero-line .wipe');
   document.documentElement.classList.add('intro-ready');
@@ -129,7 +129,7 @@ function runIntro() {
   gsap.set('.hero-meta > span', { y: 14, opacity: 0 });
   gsap.set('.photo-inner', { clipPath: 'inset(100% 0% 0% 0%)' });
   gsap.set('.photo-img', { scale: 1.3 });
-  gsap.set(['.float-card', '.spec-card'], { y: 30, opacity: 0 });
+  gsap.set('.float-card', { y: 30, opacity: 0 });
   gsap.set('.navbar', { yPercent: -100, opacity: 0 });
 
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
@@ -149,8 +149,8 @@ function runIntro() {
     .to('.navbar', { yPercent: 0, opacity: 1, duration: 0.9 }, 0.5)
     .to('.hero-meta > span', { y: 0, opacity: 1, duration: 0.7, stagger: 0.05 }, 0.6)
     .to('.hero-fade', { y: 0, opacity: 1, duration: 0.9, stagger: 0.07 }, 0.8)
-    .to(['.float-card', '.spec-card'], { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'back.out(1.6)' }, 1.0)
-    .add(() => { startFloatCards(); initHeroWave(); ScrollTrigger.refresh(); });
+    .to('.float-card', { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'back.out(1.6)' }, 1.0)
+    .add(() => { startFloatCards(); initHeroWave(); initHeroScroll(); ScrollTrigger.refresh(); });
 }
 
 // Letters of the name lift in a wave when the cursor passes over them
@@ -224,17 +224,21 @@ function startFloatCards() {
 function initHeroScroll() {
   if (!MOTION) return;
 
-  gsap.to('.hero-left', {
-    yPercent: -18, opacity: 0.2, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
-  });
-  gsap.to('.photo-img', {
-    yPercent: -12, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
-  });
-  gsap.to('.hero-right', {
-    yPercent: 10, rotate: 2, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+  ScrollTrigger.matchMedia({
+    '(min-width: 900px)': () => {
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: '+=65%', scrub: 0.8, pin: true, anticipatePin: 1 },
+      });
+      tl.to('.hero-line-1', { xPercent: -22, ease: 'none' }, 0)
+        .to('.hero-line-2', { xPercent: 18, ease: 'none' }, 0)
+        .to(['.hero-fade', '.hero-kicker', '.hero-meta'], { opacity: 0, y: -24, ease: 'none' }, 0)
+        .to('.hero-right', { scale: 1.12, x: '-6vw', ease: 'none' }, 0)
+        .to('.photo-img', { scale: 1.08, ease: 'none' }, 0)
+        .to('.hero-title', { opacity: 0.12, ease: 'none' }, 0.35);
+    },
+    '(max-width: 899px)': () => {
+      gsap.to('.photo-img', { yPercent: -10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    },
   });
 
   const card = $('#photoCard');
@@ -370,6 +374,7 @@ function initReveals() {
 // ===============================
 function initCounters() {
   $$('[data-count]').forEach((el) => {
+    if (el.closest('.stat-item')) return;
     const target = parseFloat(el.dataset.count);
     const dec = parseInt(el.dataset.decimals || '0', 10);
     if (!MOTION) { el.textContent = target.toFixed(dec); return; }
@@ -701,6 +706,67 @@ function initDetail() {
   window.addEventListener('resize', () => { if (!panel.hidden) gsap.set(panel, px(targetRect())); });
 }
 
+
+// ===============================
+// v6. ODOMETER STATS — each digit rolls into place like a counter wheel
+// ===============================
+function initOdometers() {
+  const els = $$('.stat-item [data-count]');
+  els.forEach((el) => {
+    const target = parseFloat(el.dataset.count);
+    const text = target.toFixed(parseInt(el.dataset.decimals || '0', 10));
+    if (!MOTION) { el.textContent = text; return; }
+    el.textContent = '';
+    el.classList.add('odo');
+    el.setAttribute('aria-label', text);
+    const cols = [];
+    for (const ch of text) {
+      if (!/\d/.test(ch)) { const s = document.createElement('span'); s.className = 'odo-sep'; s.textContent = ch; el.appendChild(s); continue; }
+      const col = document.createElement('span'); col.className = 'odo-col'; col.setAttribute('aria-hidden', 'true');
+      const sizer = document.createElement('span'); sizer.className = 'odo-sizer'; sizer.textContent = ch; col.appendChild(sizer);
+      const strip = document.createElement('span'); strip.className = 'odo-strip';
+      // two full turns then the digit, so it visibly spins
+      for (let k = 0; k < 20 + Number(ch) + 1; k++) { const d = document.createElement('span'); d.textContent = k % 10; strip.appendChild(d); }
+      col.appendChild(strip); el.appendChild(col); cols.push({ strip, steps: 20 + Number(ch) });
+    }
+    ScrollTrigger.create({
+      trigger: el, start: 'top 88%', once: true,
+      onEnter: () => cols.forEach(({ strip, steps }, i) => {
+        gsap.fromTo(strip, { yPercent: 0 }, { yPercent: -(steps / (steps + 1)) * 100, duration: 1.6 + i * 0.15, ease: 'power4.out' });
+      }),
+    });
+  });
+}
+
+// ===============================
+// v6. STACKED CARDS — skill groups pin and stack; the one underneath sinks back
+// ===============================
+function initStack() {
+  const cards = $$('#skills .skill-category');
+  if (!cards.length) return;
+  $('#skills .skills-grid').classList.add('stack');
+  cards.forEach((c, i) => c.style.setProperty('--i', i));
+  if (!MOTION) return;
+  cards.forEach((card, i) => {
+    const next = cards[i + 1];
+    if (!next) return;
+    gsap.to(card, {
+      scale: 0.93, filter: 'brightness(0.55)', ease: 'none',
+      scrollTrigger: { trigger: next, start: 'top 85%', end: 'top 20%', scrub: true },
+    });
+  });
+}
+
+// ===============================
+// v6. HIGHLIGHTER — key phrases get a marker swipe as you read them
+// ===============================
+function initHighlights() {
+  $$('.hl').forEach((el) => {
+    if (!MOTION) { el.classList.add('on'); return; }
+    ScrollTrigger.create({ trigger: el, start: 'top 78%', once: true, onEnter: () => el.classList.add('on') });
+  });
+}
+
 // ===============================
 // 19. CONTACT FORM (EMAILJS)
 // ===============================
@@ -758,6 +824,9 @@ function init() {
   initTitles();
   initReveals();
   initCounters();
+  initOdometers();
+  initStack();
+  initHighlights();
   initWork();
   initTimeline();
   initFooter();
@@ -766,7 +835,6 @@ function init() {
   initCursor();
   initMagnetic();
   initTilt();
-  initHeroScroll();
   initProjectFilter();
   initDetail();
   initContactForm();
