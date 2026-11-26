@@ -850,3 +850,10 @@ main { position: relative; z-index: 1; }
 .work-links { display: inline-flex; gap: 18px; align-items: center; }
 .work-link.live { color: var(--text); }
 .work-link.live:hover { color: var(--accent); }
+
+/* v14 — portrait leads the hero, name steps back a little */
+@media (min-width: 901px) {
+  .hero-grid { grid-template-columns: .92fr 1.08fr; }
+  .hero-title { font-size: clamp(48px, 6.3vw, 118px); }
+  .hero-right { width: min(720px, 100%, 74vh); }
+}
