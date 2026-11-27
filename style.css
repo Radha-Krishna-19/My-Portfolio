@@ -1345,3 +1345,15 @@ main { position: relative; z-index: 1; }
 /* his choice: white text on #e73121 (4.3:1); bolder text keeps it legible */
 [data-theme="light"] .btn-primary, [data-theme="light"] .btn-primary:hover { color: #fff; font-weight: 700; }
 [data-theme="light"] { --accent-ink: #ffffff; }
+
+/* v37 — light mode mirrors dark mode exactly, only the colour changes:
+   accent words = coloured text; highlighted phrases = solid marker with white text */
+[data-theme="light"] .hero-tagline em,
+[data-theme="light"] .statement em { color: var(--accent-fg); background: none; padding: 0; }
+[data-theme="light"] .hl { color: var(--text) !important; }
+[data-theme="light"] .hl::before { background: var(--accent); opacity: 1; top: 12%; bottom: 6%; }
+[data-theme="light"] .hl.on { color: #ffffff !important; }
+/* keep both themes structurally identical: no alternating section tones in light mode */
+[data-theme="light"] #experience,
+[data-theme="light"] #projects,
+[data-theme="light"] #achievements { background: transparent; }
