@@ -1192,3 +1192,5 @@ main { position: relative; z-index: 1; }
   .logo:hover .lk, .logo:focus-visible .lk { margin-left: 0; }
 }
 .iw { will-change: auto; }
+/* scroll cue: word first, then the line, so the moving streak points down toward the content */
+.scroll-cue { flex-direction: column-reverse; }

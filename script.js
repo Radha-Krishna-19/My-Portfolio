@@ -176,42 +176,52 @@ function runIntro() {
   gsap.set(w2, { marginLeft: 0 });
   gsap.set(name, { xPercent: -50, yPercent: -50, opacity: 0, y: 12 });
 
-  const tl = gsap.timeline({ onComplete: () => { stage.remove(); finish(); } });
-  // 1. RK. appears (softly: fade, rise and un-blur)
-  gsap.set(name, { filter: 'blur(8px)', scale: 0.97 });
-  tl.to(name, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.6 * k, ease: 'power2.out' }, 0.05);
-  // 2. expands into RADHA KRISHNA.
-  const expandAt = 0.05 + 0.5 * k;
-  tl.to(xs, { width: (i) => widths[i], duration: 0.6 * k, ease: 'power3.inOut' }, expandAt)
-    .to(w2, { marginLeft: '0.28em', duration: 0.6 * k, ease: 'power3.inOut' }, expandAt)
-    .set(name, { clearProps: 'filter' });
-  // 3. each word glides into its line of the hero title (measured at that moment)
-  const glideAt = expandAt + 0.6 * k + 0.2; // short hold on RADHA KRISHNA.
-  const glideDur = 0.85 * k;
-  tl.add(() => {
-    const t1 = $('.hero-line-1 [data-split]').getBoundingClientRect();
-    const l2 = $('.hero-line-2 [data-split]').getBoundingClientRect();
-    const dot = $('.hero-dot').getBoundingClientRect();
-    const t2 = { left: l2.left, top: l2.top, width: dot.right - l2.left };
-    [[w1, t1], [w2, t2]].forEach(([w, t]) => {
-      const r = w.getBoundingClientRect();
-      // 2D transforms keep the text re-rendered sharp every frame (no blurry layer that snaps at the end)
-      gsap.to(w, { x: t.left - r.left, y: t.top - r.top, scale: t.width / r.width, transformOrigin: '0 0',
-        force3D: false, duration: glideDur, ease: 'power3.inOut' });
-    });
-  }, glideAt);
-  tl.to($('.intro-bg', stage), { opacity: 0, duration: 0.7 * k, ease: 'power2.inOut' }, glideAt + 0.2 * k);
-  revealHero(tl, glideAt + 0.15 * k, k);
-  // 4. hand over to the real title (same pixels), with a tiny crossfade so nothing pops
-  tl.set(heroChars, { opacity: 1 }, glideAt + glideDur - 0.02)
-    .set('.hero-dot', { opacity: 1 }, glideAt + glideDur - 0.02)
-    .to(name, { opacity: 0, duration: 0.12 }, glideAt + glideDur);
+  // Start only once the tab is actually on screen and painted, plus a short beat,
+  // so RK. isn't already gone by the time the browser shows the page.
+  const play = () => {
+    const tl = gsap.timeline({ onComplete: () => { stage.remove(); finish(); } });
+    // 1. RK. appears (softly: fade, rise and un-blur)
+    gsap.set(name, { filter: 'blur(8px)', scale: 0.97 });
+    tl.to(name, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.6 * k, ease: 'power2.out' }, 0.05);
+    // 2. expands into RADHA KRISHNA.
+    const expandAt = 0.05 + 0.5 * k;
+    tl.to(xs, { width: (i) => widths[i], duration: 0.6 * k, ease: 'power3.inOut' }, expandAt)
+      .to(w2, { marginLeft: '0.28em', duration: 0.6 * k, ease: 'power3.inOut' }, expandAt)
+      .set(name, { clearProps: 'filter' });
+    // 3. each word glides into its line of the hero title (measured at that moment)
+    const glideAt = expandAt + 0.6 * k + 0.2; // short hold on RADHA KRISHNA.
+    const glideDur = 0.85 * k;
+    tl.add(() => {
+      const t1 = $('.hero-line-1 [data-split]').getBoundingClientRect();
+      const l2 = $('.hero-line-2 [data-split]').getBoundingClientRect();
+      const dot = $('.hero-dot').getBoundingClientRect();
+      const t2 = { left: l2.left, top: l2.top, width: dot.right - l2.left };
+      [[w1, t1], [w2, t2]].forEach(([w, t]) => {
+        const r = w.getBoundingClientRect();
+        // 2D transforms keep the text re-rendered sharp every frame (no blurry layer that snaps at the end)
+        gsap.to(w, { x: t.left - r.left, y: t.top - r.top, scale: t.width / r.width, transformOrigin: '0 0',
+          force3D: false, duration: glideDur, ease: 'power3.inOut' });
+      });
+    }, glideAt);
+    tl.to($('.intro-bg', stage), { opacity: 0, duration: 0.7 * k, ease: 'power2.inOut' }, glideAt + 0.2 * k);
+    revealHero(tl, glideAt + 0.15 * k, k);
+    // 4. hand over to the real title (same pixels), with a tiny crossfade so nothing pops
+    tl.set(heroChars, { opacity: 1 }, glideAt + glideDur - 0.02)
+      .set('.hero-dot', { opacity: 1 }, glideAt + glideDur - 0.02)
+      .to(name, { opacity: 0, duration: 0.12 }, glideAt + glideDur);
 
-  // Any input skips straight to the end
-  const skip = () => { if (tl.progress() < 1) tl.progress(1); };
-  const cleanup = () => ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) => window.removeEventListener(ev, skip));
-  ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) => window.addEventListener(ev, skip, { passive: true }));
-  tl.eventCallback('onComplete', () => { cleanup(); stage.remove(); finish(); });
+    // Any input skips straight to the end
+    const skip = () => { if (tl.progress() < 1) tl.progress(1); };
+    const cleanup = () => ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) => window.removeEventListener(ev, skip));
+    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) => window.addEventListener(ev, skip, { passive: true }));
+    tl.eventCallback('onComplete', () => { cleanup(); stage.remove(); finish(); });
+  };
+  const whenVisible = (fn) => {
+    if (!document.hidden) return fn();
+    const on = () => { if (!document.hidden) { document.removeEventListener('visibilitychange', on); fn(); } };
+    document.addEventListener('visibilitychange', on);
+  };
+  whenVisible(() => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(play, 350))));
 }
 
 // A soft light follows the cursor across the hero
