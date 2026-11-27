@@ -1194,3 +1194,57 @@ main { position: relative; z-index: 1; }
 .iw { will-change: auto; }
 /* scroll cue: word first, then the line, so the moving streak points down toward the content */
 .scroll-cue { flex-direction: column-reverse; }
+
+/* v30 — ink sprites now have 4px extruded gutters between frames, so scaling never
+   blends in a row of the next frame (that was the straight line mid-transition) */
+::view-transition-new(root) { -webkit-mask-size: 100% 3700%; mask-size: 100% 3700%; animation-name: ink-flow-land-g; }
+@keyframes ink-flow-land-g { from { -webkit-mask-position: 0 0.03858%; mask-position: 0 0.03858%; } to { -webkit-mask-position: 0 99.96142%; mask-position: 0 99.96142%; } }
+@media (orientation: portrait) {
+  ::view-transition-new(root) { -webkit-mask-size: 3700% 100%; mask-size: 3700% 100%; animation-name: ink-flow-port-g; }
+  @keyframes ink-flow-port-g { from { -webkit-mask-position: 0.03858% 0; mask-position: 0.03858% 0; } to { -webkit-mask-position: 99.96142% 0; mask-position: 99.96142% 0; } }
+}
+
+/* v31 — ink transition is a 36-frame flipbook driven from script.js (Web Animations);
+   CSS only sets the starting frame (fully hidden) so nothing flashes before it starts */
+::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
+::view-transition-new(root) {
+  -webkit-mask-image: url(assets/ink/l00.webp); mask-image: url(assets/ink/l00.webp);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-position: 0 0; mask-position: 0 0; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+@media (orientation: portrait) {
+  ::view-transition-new(root) { -webkit-mask-image: url(assets/ink/p00.webp); mask-image: url(assets/ink/p00.webp); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+}
+/* scroll cue: unambiguous "Scroll ↓" with a gentle downward nudge */
+.scroll-cue { flex-direction: column; gap: 6px; }
+.scroll-arrow { font-family: var(--font-body, Inter, sans-serif); font-size: 15px; color: var(--accent-fg); animation: scrollNudge 1.8s cubic-bezier(.16,1,.3,1) infinite; }
+@keyframes scrollNudge { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(6px); opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .scroll-arrow { animation: none; } }
+
+/* v32 — radial ink: frame is a big square centred on where you clicked the mode button */
+::view-transition-new(root) {
+  -webkit-mask-image: url(assets/ink/r00.webp); mask-image: url(assets/ink/r00.webp);
+  -webkit-mask-size: 200vmax 200vmax; mask-size: 200vmax 200vmax;
+  -webkit-mask-position: calc(var(--vx, 90vw) - 100vmax) calc(var(--vy, 5vh) - 100vmax);
+  mask-position: calc(var(--vx, 90vw) - 100vmax) calc(var(--vy, 5vh) - 100vmax);
+}
+@media (orientation: portrait) {
+  ::view-transition-new(root) {
+    -webkit-mask-image: url(assets/ink/r00.webp); mask-image: url(assets/ink/r00.webp);
+    -webkit-mask-size: 200vmax 200vmax; mask-size: 200vmax 200vmax;
+  }
+}
+
+/* v33 — radial ink from one padded 6x6 sprite (no seams, no flashing); JS steps through the frames */
+::view-transition-new(root) {
+  -webkit-mask-image: url(assets/ink-radial.webp); mask-image: url(assets/ink-radial.webp);
+  -webkit-mask-size: 1221.4286vmax 1221.4286vmax; mask-size: 1221.4286vmax 1221.4286vmax;
+  -webkit-mask-position: calc(var(--vx, 90vw) - 100vmax - 1.7857vmax) calc(var(--vy, 5vh) - 100vmax - 1.7857vmax);
+  mask-position: calc(var(--vx, 90vw) - 100vmax - 1.7857vmax) calc(var(--vy, 5vh) - 100vmax - 1.7857vmax);
+}
+@media (orientation: portrait) {
+  ::view-transition-new(root) {
+    -webkit-mask-image: url(assets/ink-radial.webp); mask-image: url(assets/ink-radial.webp);
+    -webkit-mask-size: 1221.4286vmax 1221.4286vmax; mask-size: 1221.4286vmax 1221.4286vmax;
+  }
+}

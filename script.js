@@ -972,9 +972,30 @@ function initTheme() {
     label();
   };
   label();
-  // fetch the ink animation quietly after the page has loaded, so the first click is instant
-  const prefetch = () => ['assets/ink-flow-land.webp', 'assets/ink-flow-port.webp'].forEach((src) => { const i = new Image(); i.src = src; });
-  if (document.readyState === 'complete') setTimeout(prefetch, 1500); else addEventListener('load', () => setTimeout(prefetch, 1500));
+  // Ink transition = 36 screen-sized frames played like a flipbook. (One giant sprite sheet
+  // got drawn in tiles on phones and showed straight-edged blocks.) Frames are fetched and
+  // decoded quietly after load so the first click is instant.
+  const INK_MS = 1600;
+  const FRAMES = 36, COLS = 6, F = 448, G = 4, CELL = F + 2 * G;   // must match assets/ink-radial.webp
+  const SPRITE = 'assets/ink-radial.webp';
+  const portrait = () => false; // radial frames work for every screen shape
+  let spriteReady = null;
+  const load = () => {
+    if (!spriteReady) {
+      const img = new Image(); img.src = SPRITE; window.__inkSprite = img;
+      spriteReady = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+    }
+    return spriteReady;
+  };
+  // where frame i sits in the sheet, expressed in the same units as the on-screen square (200vmax)
+  const framePos = (i) => {
+    const col = i % COLS, row = Math.floor(i / COLS);
+    const k = 200 / F;
+    const x = (col * CELL + G) * k, y = (row * CELL + G) * k;
+    return `calc(var(--vx) - 100vmax - ${x.toFixed(4)}vmax) calc(var(--vy) - 100vmax - ${y.toFixed(4)}vmax)`;
+  };
+  const prefetch = () => load(portrait());
+  if (document.readyState === 'complete') setTimeout(prefetch, 1200); else addEventListener('load', () => setTimeout(prefetch, 1200));
   btn.addEventListener('click', (e) => {
     const toLight = root.dataset.theme !== 'light';
     const r = btn.getBoundingClientRect();
@@ -982,7 +1003,19 @@ function initTheme() {
     root.style.setProperty('--vx', x + 'px');
     root.style.setProperty('--vy', y + 'px');
     if (!document.startViewTransition || REDUCED) { apply(toLight); return; }
-    document.startViewTransition(() => apply(toLight));
+    const p = portrait();
+    const go = () => {
+      const vt = document.startViewTransition(() => apply(toLight));
+      vt.ready.then(() => {
+        const frames = Array.from({ length: FRAMES }, (_, i) => {
+          const pos = framePos(i);
+          return { offset: i / (FRAMES - 1), maskPosition: pos, webkitMaskPosition: pos, easing: 'steps(1, end)' };
+        });
+        root.animate(frames, { duration: INK_MS, fill: 'forwards', pseudoElement: '::view-transition-new(root)' });
+      }).catch(() => {});
+    };
+    // if the frames aren't ready yet (very fast first click), wait for them, but never more than 400ms
+    Promise.race([load(p), new Promise((r) => setTimeout(r, 400))]).then(go);
   });
 }
 
