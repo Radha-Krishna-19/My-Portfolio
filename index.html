@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>P.M. Radha Krishna — Software Engineer</title>
-  <meta name="description" content="P.M. Radha Krishna — final-year CSE student at Amrita Vishwa Vidyapeetham, building backend software in Python and Node.js." />
+  <meta name="description" content="P.M. Radha Krishna — final-year CSE student at Amrita Vishwa Vidyapeetham, building full-stack web apps with React, Python and Node.js." />
   <meta name="theme-color" content="#08080b" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-i8G1RqWKTB16ieyOx3XiOQ1ebfKNZNnpSWcodcdJuiA='; style-src 'self' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self' https://api.emailjs.com; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -12,7 +12,7 @@
 
   <!-- Social preview -->
   <meta property="og:title" content="P.M. Radha Krishna — Engineering Portfolio" />
-  <meta property="og:description" content="Backend software in Python and Node.js." />
+  <meta property="og:description" content="Full-stack web apps with React, Python and Node.js." />
   <meta property="og:image" content="profile.jpeg" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23d4ff3f'/%3E%3Ctext x='50' y='66' font-size='46' font-family='Arial' font-weight='800' fill='%2308080b' text-anchor='middle'%3ERK%3C/text%3E%3C/svg%3E" />
@@ -80,11 +80,11 @@
             <span class="hero-line hero-line-1"><span data-split>Radha</span><i class="wipe" aria-hidden="true"></i></span>
             <span class="hero-line hero-line-2"><span data-split>Krishna</span><span class="hero-dot">.</span><i class="wipe" aria-hidden="true"></i></span>
           </h1>
-          <p class="hero-role hero-fade">Software Engineer <span class="role-sep">/</span> Backend <span class="role-sep">/</span> <span class="muted">B.Tech CSE '27</span></p>
-          <p class="hero-tagline hero-fade">I build backend systems that are clear, tested and <em>dependable</em>.</p>
+          <p class="hero-role hero-fade">Software Engineer <span class="role-sep">/</span> Full-stack <span class="role-sep">/</span> <span class="muted">B.Tech CSE '27</span></p>
+          <p class="hero-tagline hero-fade">I build full-stack web apps that are clear, tested and <em>dependable</em>.</p>
           <p class="hero-subtitle hero-fade">
-            Final-year CSE student at Amrita Vishwa Vidyapeetham, Coimbatore. I work mostly on backend
-            systems in Python and Node.js, from APIs and auth to Docker and CI.
+            Final-year CSE student at Amrita Vishwa Vidyapeetham, Coimbatore. I build web apps end to end:
+            React on the front, Python and Node.js behind it, with Docker and CI.
           </p>
           <div class="hero-buttons hero-fade">
             <a href="#work" class="btn btn-primary magnetic" data-cursor="link"><span class="roll" data-text="View Projects"><span>View Projects</span></span><span class="btn-arrow">→</span></a>
@@ -139,7 +139,7 @@
         <div class="about-text" data-reveal>
           <p>
             I'm a final-year CSE student at <strong>Amrita Vishwa Vidyapeetham, Coimbatore</strong>.
-            Most of my projects are backend-heavy: a campus hall-booking platform I rebuilt in my own repo with
+            Most of my projects are full-stack web apps: a campus hall-booking platform I rebuilt in my own repo with
             <span class="hl">role-based access control</span>, Docker and CI, and a canteen ordering platform
             with role-based portals and live order tracking.
           </p>
@@ -204,7 +204,7 @@
           <article class="work-card big">
             <div class="work-visual">
               <span class="work-num">01</span>
-              <span class="work-chip mono">Backend · Web</span>
+              <span class="work-chip mono">Full-stack</span>
               <ul class="work-spec"><li><span class="mono">Stack</span><span>React · Node/Express · MongoDB</span></li><li><span class="mono">Access</span><span>Role-based access control</span></li><li><span class="mono">Core</span><span>Bookings + reallocation engine</span></li><li><span class="mono">Ops</span><span>Docker Compose · CI · tests</span></li></ul>
             </div>
             <div class="work-body">
@@ -259,15 +259,15 @@
             <div class="work-visual">
               <span class="work-num">04</span>
               <span class="work-chip mono">Team project · ML</span>
-              <ul class="work-spec"><li><span class="mono">Input</span><span>Webcam → MediaPipe landmarks</span></li><li><span class="mono">Model</span><span>BiLSTM sign classifier</span></li><li><span class="mono">Backend</span><span>FastAPI + WebSockets</span></li><li><span class="mono">Frontend</span><span>React</span></li></ul>
+              <ul class="work-spec"><li><span class="mono">Input</span><span>Webcam → MediaPipe landmarks</span></li><li><span class="mono">Model</span><span>1D-CNN sign classifier</span></li><li><span class="mono">Backend</span><span>FastAPI + WebSockets</span></li><li><span class="mono">Frontend</span><span>React</span></li></ul>
             </div>
             <div class="work-body">
               <span class="project-status mono">In progress</span>
               <h3 class="work-title">Silent Voice</h3>
               <p class="work-summary">Indian Sign Language ↔ English translator, built as a team of 2.</p>
               <div class="work-cols">
-                <div><h4 class="mono">What it does</h4><p>A webcam feed is turned into hand and body landmarks with MediaPipe; a BiLSTM model trained on the INCLUDE dataset classifies the signs, and recognised signs are turned into English sentences. It also works the other way, from English to sign glosses.</p></div>
-                <div><h4 class="mono">What I built</h4><ul class="work-built"><li>The BiLSTM sign-recognition model</li><li>The full-stack app: FastAPI backend and React frontend</li><li>Live streaming between them over WebSockets</li><li>The step that turns recognised signs into sentences</li></ul></div>
+                <div><h4 class="mono">What it does</h4><p>A webcam feed is turned into hand and body landmarks with MediaPipe; a 1D-CNN trained on the INCLUDE dataset (chosen over a BiLSTM after benchmarking both) classifies the signs, and recognised signs are turned into English sentences. It also works the other way, from English to sign glosses.</p></div>
+                <div><h4 class="mono">What I built</h4><ul class="work-built"><li>The sign-recognition models: BiLSTM vs 1D-CNN benchmark</li><li>The full-stack app: FastAPI backend and React frontend</li><li>Live streaming between them over WebSockets</li><li>The step that turns recognised signs into sentences</li></ul></div>
               </div>
               <div class="project-tags"><span>Python</span><span>PyTorch</span><span>MediaPipe</span><span>FastAPI</span><span>React</span></div>
               <div class="work-foot"><span class="work-links"><a href="https://github.com/Radha-Krishna-19/Silent-Voice" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
@@ -413,7 +413,7 @@
         <div class="contact-info" data-reveal>
           <span class="section-kicker mono" data-scramble>Get in touch</span>
           <h2 class="contact-title">Hiring for software roles?<br><em class="serif">Let's talk.</em></h2>
-          <p>Open to software and backend roles, internships and collaborations — I usually reply within a day or two.</p>
+          <p>Open to software and full-stack roles, internships and collaborations — I usually reply within a day or two.</p>
 
           <div class="contact-lines">
             <a class="contact-line" href="mailto:pradhakrishna594@gmail.com" data-cursor="link">
