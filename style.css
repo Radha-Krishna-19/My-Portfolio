@@ -1183,3 +1183,12 @@ main { position: relative; z-index: 1; }
   .navbar .nav-right { justify-self: end; }
 }
 .intro-name { font-size: min(clamp(40px, 6vw, 96px), 6.6vw); }
+/* v29 — hover driven by GSAP now (smoother, interruptible); drop the CSS grid version */
+.logo-mark .lx { display: inline-block; overflow: hidden; vertical-align: bottom; grid-template-columns: none; transition: none; }
+.logo-mark .lx > span { display: inline-block; overflow: visible; }
+.logo-mark .lk { transition: none; }
+@media (min-width: 1280px) and (hover: hover) {
+  .logo:hover .lx, .logo:focus-visible .lx { grid-template-columns: none; }
+  .logo:hover .lk, .logo:focus-visible .lk { margin-left: 0; }
+}
+.iw { will-change: auto; }

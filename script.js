@@ -157,7 +157,7 @@ function runIntro() {
 
   // ---- Cinematic: RK. -> RADHA KRISHNA. -> words glide into the hero title ----
   const phone = window.innerWidth < 700;
-  const k = phone ? 0.75 : 1;
+  const k = phone ? 0.95 : 1.25;
   gsap.set(heroChars, { opacity: 0 });
   gsap.set('.hero-dot', { opacity: 0 });
 
@@ -177,13 +177,17 @@ function runIntro() {
   gsap.set(name, { xPercent: -50, yPercent: -50, opacity: 0, y: 12 });
 
   const tl = gsap.timeline({ onComplete: () => { stage.remove(); finish(); } });
-  // 1. RK. appears
-  tl.to(name, { opacity: 1, y: 0, duration: 0.45 * k, ease: 'power3.out' }, 0.05);
+  // 1. RK. appears (softly: fade, rise and un-blur)
+  gsap.set(name, { filter: 'blur(8px)', scale: 0.97 });
+  tl.to(name, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.6 * k, ease: 'power2.out' }, 0.05);
   // 2. expands into RADHA KRISHNA.
-  tl.to(xs, { width: (i) => widths[i], duration: 0.6 * k, ease: 'expo.inOut' }, 0.45 * k)
-    .to(w2, { marginLeft: '0.28em', duration: 0.6 * k, ease: 'expo.inOut' }, 0.45 * k);
+  const expandAt = 0.05 + 0.5 * k;
+  tl.to(xs, { width: (i) => widths[i], duration: 0.6 * k, ease: 'power3.inOut' }, expandAt)
+    .to(w2, { marginLeft: '0.28em', duration: 0.6 * k, ease: 'power3.inOut' }, expandAt)
+    .set(name, { clearProps: 'filter' });
   // 3. each word glides into its line of the hero title (measured at that moment)
-  const glideAt = 1.1 * k;
+  const glideAt = expandAt + 0.6 * k + 0.2; // short hold on RADHA KRISHNA.
+  const glideDur = 0.85 * k;
   tl.add(() => {
     const t1 = $('.hero-line-1 [data-split]').getBoundingClientRect();
     const l2 = $('.hero-line-2 [data-split]').getBoundingClientRect();
@@ -191,17 +195,17 @@ function runIntro() {
     const t2 = { left: l2.left, top: l2.top, width: dot.right - l2.left };
     [[w1, t1], [w2, t2]].forEach(([w, t]) => {
       const r = w.getBoundingClientRect();
-      const sc = t.width / r.width;
-      gsap.to(w, { x: t.left - r.left, y: t.top - r.top, scale: sc, transformOrigin: '0 0',
-        duration: 1.0 * k, ease: 'expo.inOut' });
+      // 2D transforms keep the text re-rendered sharp every frame (no blurry layer that snaps at the end)
+      gsap.to(w, { x: t.left - r.left, y: t.top - r.top, scale: t.width / r.width, transformOrigin: '0 0',
+        force3D: false, duration: glideDur, ease: 'power3.inOut' });
     });
   }, glideAt);
-  tl.to($('.intro-bg', stage), { opacity: 0, duration: 0.8 * k, ease: 'power2.inOut' }, glideAt + 0.25 * k);
-  revealHero(tl, glideAt + 0.2 * k, k);
-  // 4. swap the flying words for the real title (they sit on the same pixels)
-  tl.set(heroChars, { opacity: 1 }, glideAt + 1.02 * k)
-    .set('.hero-dot', { opacity: 1 }, glideAt + 1.02 * k)
-    .set(name, { opacity: 0 }, glideAt + 1.04 * k);
+  tl.to($('.intro-bg', stage), { opacity: 0, duration: 0.7 * k, ease: 'power2.inOut' }, glideAt + 0.2 * k);
+  revealHero(tl, glideAt + 0.15 * k, k);
+  // 4. hand over to the real title (same pixels), with a tiny crossfade so nothing pops
+  tl.set(heroChars, { opacity: 1 }, glideAt + glideDur - 0.02)
+    .set('.hero-dot', { opacity: 1 }, glideAt + glideDur - 0.02)
+    .to(name, { opacity: 0, duration: 0.12 }, glideAt + glideDur);
 
   // Any input skips straight to the end
   const skip = () => { if (tl.progress() < 1) tl.progress(1); };
@@ -1100,7 +1104,29 @@ else init();
 
 // Nav logo: RK. expands to RADHA KRISHNA. on hover (only where there is room)
 (function initLogoExpand() {
+  const logo = document.querySelector('.logo');
   const mark = document.querySelector('.logo-mark');
   if (!mark) return;
   mark.innerHTML = 'R<span class="lx"><span>ADHA</span></span><span class="lk">K</span><span class="lx"><span>RISHNA</span></span><span class="logo-dot">.</span>';
+  if (typeof gsap === 'undefined') return;
+  const mq = window.matchMedia('(min-width: 1280px) and (hover: hover)');
+  const xs = mark.querySelectorAll('.lx');
+  const inner = mark.querySelectorAll('.lx > span');
+  const lk = mark.querySelector('.lk');
+  const widths = () => [...inner].map((s) => s.scrollWidth);
+  gsap.set(xs, { width: 0 }); gsap.set(inner, { opacity: 0 });
+  const open = () => {
+    if (!mq.matches) return;
+    const w = widths();
+    gsap.to(xs, { width: (i) => w[i], duration: 0.7, ease: 'power3.out', overwrite: true });
+    gsap.to(inner, { opacity: 1, duration: 0.45, delay: 0.08, ease: 'power1.out', overwrite: true });
+    gsap.to(lk, { marginLeft: '0.28em', duration: 0.7, ease: 'power3.out', overwrite: true });
+  };
+  const close = () => {
+    gsap.to(xs, { width: 0, duration: 0.55, ease: 'power3.inOut', overwrite: true });
+    gsap.to(inner, { opacity: 0, duration: 0.3, ease: 'power1.in', overwrite: true });
+    gsap.to(lk, { marginLeft: 0, duration: 0.55, ease: 'power3.inOut', overwrite: true });
+  };
+  logo.addEventListener('mouseenter', open); logo.addEventListener('mouseleave', close);
+  logo.addEventListener('focus', open); logo.addEventListener('blur', close);
 })();
