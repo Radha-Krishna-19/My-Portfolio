@@ -119,38 +119,95 @@ function initAnchors() {
 // ===============================
 function runIntro() {
   const heroChars = $$('.hero-title [data-split]').flatMap((el) => maskTitle(el));
+  $$('.hero-line .wipe').forEach((w) => w.remove());
   if (!MOTION) { document.documentElement.classList.add('intro-ready'); initHeroScroll(); return; }
 
-  const wipes = $$('.hero-line .wipe');
-  document.documentElement.classList.add('intro-ready');
-  gsap.set(heroChars, { opacity: 0 });
-  gsap.set('.hero-dot', { scale: 0, transformOrigin: '50% 80%' });
-  gsap.set('.hero-fade', { y: 24, opacity: 0 });
-  gsap.set('.hero-meta > span', { y: 14, opacity: 0 });
-  gsap.set('.photo-inner', { clipPath: 'inset(100% 0% 0% 0%)' });
-  gsap.set('.photo-img', { scale: 1.3 });
-  gsap.set('.float-card', { y: 30, opacity: 0 });
-  gsap.set('.navbar', { yPercent: -100, opacity: 0 });
+  let seen = false;
+  try { seen = sessionStorage.getItem('rk-intro') === '1'; sessionStorage.setItem('rk-intro', '1'); } catch (e) {}
 
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  // each line: bar sweeps in from the left, letters appear under it, bar exits to the right
-  wipes.forEach((w, i) => {
-    const line = w.closest('.hero-line');
-    const chars = $$('.split-char', line);
-    const at = i * 0.18;
-    tl.fromTo(w, { scaleX: 0, transformOrigin: '0% 50%' }, { scaleX: 1, duration: 0.45, ease: 'expo.inOut' }, at)
-      .set(chars, { opacity: 1 }, at + 0.45)
-      .set(w, { transformOrigin: '100% 50%' }, at + 0.45)
-      .to(w, { scaleX: 0, duration: 0.5, ease: 'expo.inOut' }, at + 0.45);
-  });
-  tl.to('.hero-dot', { scale: 1, duration: 0.8, ease: 'elastic.out(1, 0.45)' }, 0.95)
-    .to('.photo-inner', { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'expo.inOut' }, 0.2)
-    .to('.photo-img', { scale: 1, duration: 1.6 }, 0.2)
-    .to('.navbar', { yPercent: 0, opacity: 1, duration: 0.9 }, 0.5)
-    .to('.hero-meta > span', { y: 0, opacity: 1, duration: 0.7, stagger: 0.05 }, 0.6)
-    .to('.hero-fade', { y: 0, opacity: 1, duration: 0.9, stagger: 0.07 }, 0.8)
-    .to('.float-card', { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'back.out(1.6)' }, 1.0)
-    .add(() => { initHeroScroll(); ScrollTrigger.refresh(); });
+  // Shared end state for the rest of the hero
+  const prepHero = () => {
+    gsap.set('.hero-fade', { y: 24, opacity: 0 });
+    gsap.set('.hero-meta > span', { y: 14, opacity: 0 });
+    gsap.set('.photo-inner', { clipPath: 'inset(100% 0% 0% 0%)' });
+    gsap.set('.photo-img', { scale: 1.25 });
+    gsap.set('.float-card', { y: 30, opacity: 0 });
+    gsap.set('.navbar', { opacity: 0 });
+  };
+  const revealHero = (tl, at, k = 1) => {
+    tl.to('.photo-inner', { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.0 * k, ease: 'expo.inOut' }, at)
+      .to('.photo-img', { scale: 1, duration: 1.4 * k, ease: 'expo.out' }, at)
+      .to('.navbar', { opacity: 1, duration: 0.6 * k, ease: 'power2.out' }, at + 0.35 * k)
+      .to('.hero-meta > span', { y: 0, opacity: 1, duration: 0.6 * k, stagger: 0.05, ease: 'expo.out' }, at + 0.3 * k)
+      .to('.hero-fade', { y: 0, opacity: 1, duration: 0.8 * k, stagger: 0.06, ease: 'expo.out' }, at + 0.35 * k)
+      .to('.float-card', { y: 0, opacity: 1, duration: 0.8 * k, stagger: 0.1, ease: 'back.out(1.6)' }, at + 0.5 * k);
+  };
+  const finish = () => { initHeroScroll(); ScrollTrigger.refresh(); };
+
+  document.documentElement.classList.add('intro-ready');
+  prepHero();
+
+  // Return visits in the same session: no cinematic, just a quick settle
+  if (seen) {
+    gsap.set(heroChars, { opacity: 1 });
+    const tl = gsap.timeline({ onComplete: finish });
+    revealHero(tl, 0, 0.7);
+    return;
+  }
+
+  // ---- Cinematic: RK. -> RADHA KRISHNA. -> words glide into the hero title ----
+  const phone = window.innerWidth < 700;
+  const k = phone ? 0.75 : 1;
+  gsap.set(heroChars, { opacity: 0 });
+  gsap.set('.hero-dot', { opacity: 0 });
+
+  const stage = document.createElement('div');
+  stage.className = 'intro';
+  stage.setAttribute('aria-hidden', 'true');
+  stage.innerHTML = '<div class="intro-bg"></div><div class="intro-name">' +
+    '<span class="iw iw1">R<span class="ix"><span>ADHA</span></span></span>' +
+    '<span class="iw iw2">K<span class="ix"><span>RISHNA</span></span><span class="idot">.</span></span></div>';
+  document.body.appendChild(stage);
+  const name = $('.intro-name', stage);
+  const w1 = $('.iw1', stage), w2 = $('.iw2', stage);
+  const xs = $$('.ix', stage);
+  const widths = xs.map((x) => x.firstElementChild.getBoundingClientRect().width);
+  gsap.set(xs, { width: 0 });
+  gsap.set(w2, { marginLeft: 0 });
+  gsap.set(name, { xPercent: -50, yPercent: -50, opacity: 0, y: 12 });
+
+  const tl = gsap.timeline({ onComplete: () => { stage.remove(); finish(); } });
+  // 1. RK. appears
+  tl.to(name, { opacity: 1, y: 0, duration: 0.45 * k, ease: 'power3.out' }, 0.05);
+  // 2. expands into RADHA KRISHNA.
+  tl.to(xs, { width: (i) => widths[i], duration: 0.6 * k, ease: 'expo.inOut' }, 0.45 * k)
+    .to(w2, { marginLeft: '0.28em', duration: 0.6 * k, ease: 'expo.inOut' }, 0.45 * k);
+  // 3. each word glides into its line of the hero title (measured at that moment)
+  const glideAt = 1.1 * k;
+  tl.add(() => {
+    const t1 = $('.hero-line-1 [data-split]').getBoundingClientRect();
+    const l2 = $('.hero-line-2 [data-split]').getBoundingClientRect();
+    const dot = $('.hero-dot').getBoundingClientRect();
+    const t2 = { left: l2.left, top: l2.top, width: dot.right - l2.left };
+    [[w1, t1], [w2, t2]].forEach(([w, t]) => {
+      const r = w.getBoundingClientRect();
+      const sc = t.width / r.width;
+      gsap.to(w, { x: t.left - r.left, y: t.top - r.top, scale: sc, transformOrigin: '0 0',
+        duration: 1.0 * k, ease: 'expo.inOut' });
+    });
+  }, glideAt);
+  tl.to($('.intro-bg', stage), { opacity: 0, duration: 0.8 * k, ease: 'power2.inOut' }, glideAt + 0.25 * k);
+  revealHero(tl, glideAt + 0.2 * k, k);
+  // 4. swap the flying words for the real title (they sit on the same pixels)
+  tl.set(heroChars, { opacity: 1 }, glideAt + 1.02 * k)
+    .set('.hero-dot', { opacity: 1 }, glideAt + 1.02 * k)
+    .set(name, { opacity: 0 }, glideAt + 1.04 * k);
+
+  // Any input skips straight to the end
+  const skip = () => { if (tl.progress() < 1) tl.progress(1); };
+  const cleanup = () => ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) => window.removeEventListener(ev, skip));
+  ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((ev) => window.addEventListener(ev, skip, { passive: true }));
+  tl.eventCallback('onComplete', () => { cleanup(); stage.remove(); finish(); });
 }
 
 // A soft light follows the cursor across the hero
@@ -1014,3 +1071,36 @@ function init() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
+
+// v24 — sliding glass highlight in the nav (desktop)
+(function initNavGlow() {
+  const menu = document.getElementById('navMenu');
+  if (!menu || !window.matchMedia('(min-width: 901px)').matches) return;
+  const glow = document.createElement('span');
+  glow.className = 'nav-glow'; glow.setAttribute('aria-hidden', 'true');
+  menu.prepend(glow);
+  const links = menu.querySelectorAll('a');
+  const moveTo = (a) => {
+    if (!a) { glow.classList.remove('on'); return; }
+    glow.style.width = a.offsetWidth + 'px';
+    glow.style.transform = `translateX(${a.offsetLeft}px)`;
+    glow.classList.add('on');
+  };
+  const active = () => menu.querySelector('a.active');
+  links.forEach((a) => {
+    a.addEventListener('mouseenter', () => moveTo(a));
+    a.addEventListener('focus', () => moveTo(a));
+  });
+  menu.addEventListener('mouseleave', () => moveTo(active()));
+  const mo = new MutationObserver(() => { if (!menu.matches(':hover')) moveTo(active()); });
+  links.forEach((a) => mo.observe(a, { attributes: true, attributeFilter: ['class'] }));
+  window.addEventListener('resize', () => moveTo(active()));
+})();
+
+
+// Nav logo: RK. expands to RADHA KRISHNA. on hover (only where there is room)
+(function initLogoExpand() {
+  const mark = document.querySelector('.logo-mark');
+  if (!mark) return;
+  mark.innerHTML = 'R<span class="lx"><span>ADHA</span></span><span class="lk">K</span><span class="lx"><span>RISHNA</span></span><span class="logo-dot">.</span>';
+})();
