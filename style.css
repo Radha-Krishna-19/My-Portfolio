@@ -1061,3 +1061,13 @@ main { position: relative; z-index: 1; }
 @media (max-width: 600px) {
   .section-title, .section-title.big { font-size: 7.1vw; }
 }
+
+/* v23 — optical balance + keyboard focus */
+/* a trailing arrow reads heavier than text, so the arrow side gets slightly less padding */
+.btn:has(.btn-arrow) { padding-right: 22px; }
+/* one consistent focus ring for keyboard users only (mouse clicks don't show it) */
+:where(a, button, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent-fg); outline-offset: 3px; border-radius: 100px;
+}
+:where(input, textarea):focus-visible { border-radius: inherit; outline-offset: 1px; }
+.work-card:focus-visible, .work-link:focus-visible { border-radius: inherit; }

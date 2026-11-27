@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>P.M. Radha Krishna — Software &amp; Security</title>
-  <meta name="description" content="P.M. Radha Krishna — final-year CSE student at Amrita Vishwa Vidyapeetham, building backend software and moving into cybersecurity." />
+  <title>P.M. Radha Krishna — Software Engineer</title>
+  <meta name="description" content="P.M. Radha Krishna — final-year CSE student at Amrita Vishwa Vidyapeetham, building backend software in Python and Node.js." />
   <meta name="theme-color" content="#08080b" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-i8G1RqWKTB16ieyOx3XiOQ1ebfKNZNnpSWcodcdJuiA='; style-src 'self' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self' https://api.emailjs.com; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="color-scheme" content="dark light" />
 
   <!-- Social preview -->
   <meta property="og:title" content="P.M. Radha Krishna — Engineering Portfolio" />
-  <meta property="og:description" content="Backend software, and a growing focus on security." />
+  <meta property="og:description" content="Backend software in Python and Node.js." />
   <meta property="og:image" content="profile.jpeg" />
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23d4ff3f'/%3E%3Ctext x='50' y='66' font-size='46' font-family='Arial' font-weight='800' fill='%2308080b' text-anchor='middle'%3ERK%3C/text%3E%3C/svg%3E" />
@@ -20,7 +22,7 @@
   <!-- Fonts & icons -->
   <link rel="preload" href="vendor/fonts/syne-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="vendor/fonts/fonts.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@2.15.1/devicon.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devicon@2.15.1/devicon.min.css" integrity="sha384-mTX5j/NIzlehkuOql3BYfNpkDrnvRHS5S7V3ctncUhJjtlL1+85q8lCKi8A5sUb+" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css" />
 
   <!-- Animation engine (vendored, no CDN dependency) -->
@@ -29,7 +31,7 @@
   <script defer src="vendor/lenis.min.js"></script>
 
   <!-- EmailJS SDK -->
-  <script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script defer src="vendor/emailjs.min.js"></script>
 
   <script defer src="script.js"></script>
 </head>
@@ -57,7 +59,7 @@
         <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
         <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
       </button>
-      <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="nav-pill magnetic">Resume ↓</a>
+      <a href="RESUME.pdf" download="P.M._Radha_Krishna_Resume.pdf" class="nav-pill magnetic">Resume ↓</a>
       <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span></button>
     </div>
   </nav>
@@ -78,15 +80,15 @@
             <span class="hero-line hero-line-1"><span data-split>Radha</span><i class="wipe" aria-hidden="true"></i></span>
             <span class="hero-line hero-line-2"><span data-split>Krishna</span><span class="hero-dot">.</span><i class="wipe" aria-hidden="true"></i></span>
           </h1>
-          <p class="hero-role hero-fade">Software Engineer <span class="role-sep">/</span> Security <span class="role-sep">/</span> <span class="muted">B.Tech CSE '27</span></p>
-          <p class="hero-tagline hero-fade">I build software, and I'm learning how it breaks so I can make it <em>safer</em>.</p>
+          <p class="hero-role hero-fade">Software Engineer <span class="role-sep">/</span> Backend <span class="role-sep">/</span> <span class="muted">B.Tech CSE '27</span></p>
+          <p class="hero-tagline hero-fade">I build backend systems that are clear, tested and <em>dependable</em>.</p>
           <p class="hero-subtitle hero-fade">
             Final-year CSE student at Amrita Vishwa Vidyapeetham, Coimbatore. I work mostly on backend
-            systems in Python and Node.js, and I'm now building my security skills hands-on.
+            systems in Python and Node.js, from APIs and auth to Docker and CI.
           </p>
           <div class="hero-buttons hero-fade">
             <a href="#work" class="btn btn-primary magnetic" data-cursor="link"><span class="roll" data-text="View Projects"><span>View Projects</span></span><span class="btn-arrow">→</span></a>
-            <a href="RESUME.docx" download="P.M._Radha_Krishna_Resume.docx" class="btn btn-ghost magnetic" data-cursor="link"><span class="roll" data-text="Download Resume"><span>Download Resume</span></span><span class="btn-arrow">↓</span></a>
+            <a href="RESUME.pdf" download="P.M._Radha_Krishna_Resume.pdf" class="btn btn-ghost magnetic" data-cursor="link"><span class="roll" data-text="Download Resume"><span>Download Resume</span></span><span class="btn-arrow">↓</span></a>
           </div>
           <div class="hero-socials hero-fade">
             <a href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener" class="icon-btn magnetic" aria-label="GitHub">
@@ -119,7 +121,7 @@
     <!-- ============ MARQUEE ============ -->
     <div class="marquee-band" aria-hidden="true">
       <div class="marquee marquee-a"><div class="marquee-track">
-        <span>Python</span><i>/</i><span>FastAPI</span><i>/</i><span>Node.js</span><i>/</i><span>React</span><i>/</i><span>MongoDB</span><i>/</i><span>MySQL</span><i>/</i><span>Docker</span><i>/</i><span>Linux</span><i>/</i><span>Git</span><i>/</i><span>Networking</span><i>/</i><span>Security</span><i>/</i>
+        <span>Python</span><i>/</i><span>FastAPI</span><i>/</i><span>Node.js</span><i>/</i><span>React</span><i>/</i><span>MongoDB</span><i>/</i><span>MySQL</span><i>/</i><span>Docker</span><i>/</i><span>Linux</span><i>/</i><span>Git</span><i>/</i><span>REST APIs</span><i>/</i><span>CI/CD</span><i>/</i>
       </div></div>
     </div>
 
@@ -130,7 +132,7 @@
       </div>
 
       <p class="statement" id="statement">
-        I like building software that holds up, and understanding <em>how it breaks</em> so I can make it safer.
+        I like building software that <em>holds up</em>: simple to read, tested, and safe to run.
       </p>
 
       <div class="about-grid">
@@ -143,8 +145,8 @@
           </p>
           <p>
             As a DevOps research intern I set up dev containers, GitHub Actions CI and
-            <span class="hl">GPG file encryption</span> for the team. Right now I'm going deeper into
-            <span class="hl">cybersecurity</span>: networking, Linux, traffic analysis and log monitoring.
+            GPG file encryption for the team. Right now I'm getting sharper at the fundamentals:
+            <span class="hl">data structures and algorithms</span> in Python, and better-tested code.
           </p>
           <p class="aside mono">Off-screen — chess · drawing · guitar · NSS volunteering</p>
         </div>
@@ -268,7 +270,7 @@
                 <div><h4 class="mono">What I built</h4><ul class="work-built"><li>The BiLSTM sign-recognition model</li><li>The full-stack app: FastAPI backend and React frontend</li><li>Live streaming between them over WebSockets</li><li>The step that turns recognised signs into sentences</li></ul></div>
               </div>
               <div class="project-tags"><span>Python</span><span>PyTorch</span><span>MediaPipe</span><span>FastAPI</span><span>React</span></div>
-              <div class="work-foot"><span class="work-links"><a href="https://radha-krishna-19.github.io/Silent-Voice/" target="_blank" rel="noopener" class="work-link live">Live site <span>↗</span></a><a href="https://github.com/Radha-Krishna-19/Silent-Voice" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
+              <div class="work-foot"><span class="work-links"><a href="https://github.com/Radha-Krishna-19/Silent-Voice" target="_blank" rel="noopener" class="work-link">GitHub <span>↗</span></a></span></div>
             </div>
           </article>
           <a class="work-card work-end" href="https://github.com/Radha-Krishna-19" target="_blank" rel="noopener">
@@ -340,8 +342,8 @@
           <div class="skill-tags"><span><i class="devicon-fastapi-plain"></i>FastAPI</span><span><i class="devicon-nodejs-plain"></i>Node.js / Express</span><span>REST APIs</span><span>JWT auth · RBAC</span><span>Socket.IO</span><span><i class="devicon-react-original"></i>React</span><span><i class="devicon-mongodb-plain"></i>MongoDB</span><span><i class="devicon-mysql-plain"></i>MySQL</span></div>
         </div>
         <div class="skill-category" data-reveal>
-          <h3>Security &amp; Systems</h3>
-          <div class="skill-tags"><span><i class="devicon-linux-plain"></i>Linux / Bash</span><span>Networking <em>CN · Packet Tracer</em></span><span>GPG encryption</span><span>Auth &amp; access control</span><span>Wireshark <em>learning</em></span><span>SIEM / ELK <em>learning</em></span></div>
+          <h3>Systems &amp; Fundamentals</h3>
+          <div class="skill-tags"><span><i class="devicon-linux-plain"></i>Linux / Bash</span><span>Networking <em>coursework</em></span><span>Operating systems <em>coursework</em></span><span>DBMS</span><span>Auth &amp; access control</span><span>Cyber security <em>coursework</em></span></div>
         </div>
         <div class="skill-category" data-reveal>
           <h3>Tools &amp; DevOps</h3>
@@ -410,8 +412,8 @@
       <div class="contact-grid">
         <div class="contact-info" data-reveal>
           <span class="section-kicker mono" data-scramble>Get in touch</span>
-          <h2 class="contact-title">Hiring for software or security roles?<br><em class="serif">Let's talk.</em></h2>
-          <p>Open to software and security roles, internships and collaborations — I usually reply within a day or two.</p>
+          <h2 class="contact-title">Hiring for software roles?<br><em class="serif">Let's talk.</em></h2>
+          <p>Open to software and backend roles, internships and collaborations — I usually reply within a day or two.</p>
 
           <div class="contact-lines">
             <a class="contact-line" href="mailto:pradhakrishna594@gmail.com" data-cursor="link">
